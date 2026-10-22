@@ -8,33 +8,43 @@ Browserbasiertes Aufbau- und Nightlife-Management-Spiel aus dem Abschlussprojekt
 
 ## Spielidee
 
-Du steuerst Maria durch den Warehouse District, einen kleinen Industrie-Stadtbezirk. Mit einem Startkapital von 300 € baust du deinen ersten Underground-Club auf.
+Du steuerst Maria durch den Warehouse District. Die Stadt ist die **Zentrale**: Jedes Gebäude ist ein Ort oder ein Minispiel. Alle Minispiele teilen sich denselben Spielstand – Kapital, Ruf und Saisonfortschritt.
 
-### Mission 01
+### Minispiel „Party-Nacht“ (spielbar)
 
-1. Bei **Beat Dealers** (DJ-Agentur) einen DJ buchen – 120 €
-2. Bei **Vinyl Junky** (Plattenladen) eine Soundanlage kaufen – 90 €
-3. Im **Bunker 99** (Club) den Eintrittspreis festlegen und die erste Party veranstalten – 40 € Eventkosten
+Eine Saison hat **5 Nächte**. Ziel: **4.000 € Kapital nach der letzten Nacht**. Startkapital: 300 €.
 
-Der Eintrittspreis (5–25 €) beeinflusst Gästezahl, Umsatz, Gästezufriedenheit und Ruf.
+1. **Vinyl Junky** (Plattenladen): Soundanlage kaufen (Pflicht), später Nebelmaschine, Lichtshow und Bar-Upgrade für mehr Stimmung und Umsatz.
+2. **Beat Dealers** (DJ-Agentur): Für jede Nacht einen DJ buchen. Jeder DJ hat Genre, Gage, Fans und Einfluss auf die Stimmung. Die Headlinerin Nova Black bucht nur, wer genug Ruf hat.
+3. **Bunker 99** (Club): Eintrittspreis und Werbung festlegen, Party starten, Abrechnung ansehen.
+
+Jede Nacht hat ein **Ereignis** (z. B. Techno-Hype, Semesterstart, Starkregen, Hafenfestival). Wer den DJ passend zum Abend bucht, bekommt deutlich mehr Gäste. Ein zu hoher Eintritt kostet Stimmung und Ruf, zu wenig Werbung kostet Gäste. Rutscht das Kapital unter null, ist der Club pleite.
+
+### Geplante Minispiele
+
+| Minispiel | Ort | Idee |
+|---|---|---|
+| Beat-Battle | DJ-Pult | Rhythmusspiel: im Takt drücken, Crowd-Energie halten |
+| Crate Digging | Vinyl Junky | Unter Zeitdruck die richtigen Platten für das Set finden |
+| Türsteher | Bunker 99 | Gäste einlassen oder abweisen, die richtige Mischung finden |
 
 ## Steuerung
 
 | Aktion | Tastatur | Touch |
 |---|---|---|
 | Laufen | WASD oder Pfeiltasten | Pfeil-Buttons unter dem Spielfeld |
-| Gebäude betreten | E oder Enter (auf dem türkisen Eingangsfeld) | Button „E / Aktion“ |
+| Gebäude betreten | E oder Enter (auf dem türkisen Eingangsfeld) | Button „E / Betreten“ |
 | Fenster schließen | Esc | „Zurück“ / „Schließen“ |
-| Buttons im Fenster | Tab zum Wechseln, Enter oder Leertaste zum Auslösen | antippen |
+| Im Fenster | Tab wechseln, Enter oder Leertaste auslösen, Pfeiltasten für Regler und Auswahl | antippen |
 
-Weitere Funktionen: Tag/Nacht-Umschaltung, Minikarte, Passanten (NPCs), automatisches Speichern des Spielstands im Browser (localStorage), „Neues Spiel“ zum Zurücksetzen.
+Weitere Funktionen: Tag/Nacht-Umschaltung, Minikarte, Passanten, automatisches Speichern im Browser (localStorage), „Neues Spiel“ zum kompletten Zurücksetzen.
 
 ## Technik
 
 - Reines HTML5, CSS und JavaScript – keine Bibliotheken, keine externen Bilder oder Schriften
 - Grafik komplett per Canvas 2D gezeichnet (isometrische Karte 20 × 20 Felder)
 - Responsive: unter 900 px Breite einspaltig mit Touch-Steuerung
-- Barrierefreiheit: Dialoge mit `role="dialog"`, Fokus springt in den Dialog und zurück, Tab bleibt im Dialog, sichtbarer Tastaturfokus
+- Barrierefreiheit: Dialoge mit `role="dialog"`, Fokus springt in den Dialog und zurück, Tab bleibt im Dialog, sichtbarer Tastaturfokus, Fortschrittsbalken mit ARIA-Werten, Animationen respektieren „Bewegung reduzieren“
 
 ### Dateien
 
@@ -42,7 +52,31 @@ Weitere Funktionen: Tag/Nacht-Umschaltung, Minikarte, Passanten (NPCs), automati
 |---|---|
 | `index.html` | Seitenaufbau: Spielfeld, Seitenleiste, Dialogfenster |
 | `style.css` | Gestaltung und responsive Anpassungen |
-| `game.js` | Spielwelt, Zeichenfunktionen, Spiellogik, Dialoge, Eingabe |
+| `js/data.js` | Alle Spieldaten: DJs, Ausstattung, Werbung, Ereignisse, Saisonziel |
+| `js/economy.js` | Berechnung einer Party-Nacht (Gäste, Stimmung, Umsatz, Ruf) |
+| `js/core.js` | Spielstand, Speichern, Seitenleiste, Dialogfenster |
+| `js/city.js` | Die Stadt: Karte, Gebäude, Spielfigur, Passanten, Minikarte |
+| `js/locations.js` | Orte: Beat Dealers und Vinyl Junky |
+| `js/games/party-night.js` | Minispiel Party-Nacht: Planung, Nacht, Abrechnung, Saisonende |
+| `js/main.js` | Start, Tastatur- und Touch-Steuerung |
+
+### Ein neues Minispiel ergänzen
+
+1. Neue Datei unter `js/games/` anlegen, die eine Funktion `GDU.places.<gebäude-id>` bereitstellt.
+2. In `index.html` vor `js/main.js` einbinden.
+3. Bei Bedarf ein Gebäude in `GDU.buildings` (`js/city.js`) ergänzen und den Eintrag in `GDU.minigames` (`js/data.js`) auf `ready: true` setzen.
+
+### Spielbalance
+
+Die Zahlen in `js/data.js` wurden mit einer Simulation von je 4.000 Saisons geprüft:
+
+| Spielweise | Ziel erreicht |
+|---|---|
+| Durchdacht (DJ passend zum Abend, Werbung, Technik) | ca. 100 % |
+| Solide (immer DJ Voltage, 12 € Eintritt, Flyer) | ca. 60 % |
+| Zufällige Entscheidungen | ca. 5 % |
+| Immer der billigste DJ ohne Werbung | 0 % |
+| Abzocke (25 € Eintritt) | 0 % |
 
 ## Einbindung in WordPress
 
@@ -67,11 +101,12 @@ Hinweis: Für die Tastatursteuerung muss einmal ins Spielfeld geklickt werden, d
 | 0.3 | Neue Grafik: Skyline, Fassaden, Dachdetails, Tag/Nacht |
 | 0.4 | Passanten, Minikarte, Laufanimation |
 | 0.5 | Überarbeitete Gebäude und Spielfigur, Warteschlange vor Bunker 99 |
-| 1.0 | Kursversion: Code in `index.html`, `style.css` und `game.js` aufgeteilt und kommentiert, doppelte Funktionsversionen entfernt; Enter-Taste in Dialogen repariert; Fokussteuerung für Dialoge; doppelt gezeichnete Laufanimation entfernt; Hintergrund über volle Seitenhöhe; kleinere Minikarte auf dem Handy; einheitliche Versionsangaben. Spielmechanik, Grafik und Spielstände unverändert. |
+| 1.0 | Kursversion: Code aufgeteilt und kommentiert, Enter-Taste und Fokus in Dialogen repariert, einheitliche Versionsangaben. Gesichert im Branch `version-1.0`. |
+| 2.0 | Stadt als Zentrale für Minispiele. Neues Minispiel **Party-Nacht** mit Saison über 5 Nächte, Saisonziel, 4 DJs, Ausstattung, Werbung, Abend-Ereignissen, Abrechnung, Sieg- und Niederlagebedingung. Warteschlange vor dem Club wächst mit dem Ruf. Code in Module aufgeteilt, Spielbalance per Simulation geprüft. |
 
 ## Entwicklung
 
-Konzeption, Gestaltung und Umsetzung durch Maria Hristova, unterstützt durch KI-Werkzeuge (ChatGPT, Claude) bei Code, Fehlersuche und Dokumentation.
+Konzeption, Gestaltung und Umsetzung durch Maria Hristova, unterstützt durch KI-Werkzeuge (ChatGPT, Claude) bei Code, Spielbalance, Fehlersuche und Dokumentation.
 
 ## Projektgrenze
 

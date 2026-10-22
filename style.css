@@ -178,3 +178,81 @@ footer { text-align: center; color: #8298aa; font-size: 12px; padding: 12px; }
   /* Minikarte auf dem Handy verkleinern, damit sie die Stadt nicht verdeckt */
   #minimap { width: 84px; height: 84px; right: 8px; top: 8px; }
 }
+
+/* ===== Version 2.0: Saison, Minispiele und Dialoge der Orte ===== */
+
+.warn { color: #ff8fb6; }
+.small { font-size: 12px; }
+
+/* Saisonziel in der Seitenleiste */
+.goal { display: flex; justify-content: space-between; font-size: 13px; color: #c1d2df; }
+.goal strong { color: #78f5e1; }
+.bar { height: 8px; background: #223546; border-radius: 99px; overflow: hidden; margin: 6px 0 12px; }
+.bar i { display: block; height: 100%; background: linear-gradient(90deg, #00e5c3, #ff2d95); border-radius: 99px; transition: width .4s; }
+.tonight { background: #223546; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; line-height: 1.4; }
+.tonight small { display: block; color: #9ab9cb; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+.tonight b { display: block; color: #ffb3d6; }
+.tonight span { font-size: 12px; color: #c1d2df; }
+
+/* Minispiel-Übersicht */
+.games { display: grid; gap: 6px; }
+.game { display: grid; grid-template-columns: 1fr auto; background: #223546; border-radius: 8px; padding: 8px 10px; font-size: 13px; }
+.game span { grid-column: 1; color: #9ab9cb; font-size: 12px; }
+.game em { grid-row: 1 / 3; grid-column: 2; align-self: center; font-style: normal; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 99px; }
+.game.ready em { background: #00e5c322; color: #78f5e1; }
+.game.soon { opacity: .65; }
+.game.soon em { background: #ffffff14; color: #a5b7c4; }
+
+/* Breite Dialoge mit Karten (DJs, Ausstattung) */
+.dialog.wide { width: min(820px, 100%); }
+.note { background: #0f1c28; border-left: 3px solid #ff2d95; border-radius: 6px; padding: 9px 12px; font-size: 14px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 12px; }
+.card { background: #1b2030; border: 1px solid #345467; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.card p { font-size: 13px; line-height: 1.45; margin: 0; color: #c1d2df; flex: 1; }
+.card button { width: 100%; margin-top: 4px; }
+.card.picked { border-color: #00e5c3; box-shadow: 0 0 0 1px #00e5c3 inset; }
+.card.locked, .card.soon { opacity: .6; }
+.card-head { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.card-head b { font-size: 15px; margin-right: auto; }
+.tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; padding: 3px 7px; border-radius: 99px; background: #2e485e; color: #cfe3ee; }
+.tag.hot { background: #ff2d9530; color: #ff8fc4; }
+.facts { list-style: none; margin: 0; padding: 0; display: flex; gap: 10px; font-size: 12px; color: #9ab9cb; }
+.facts b { color: #eaf6ff; }
+
+/* Party-Planung */
+.night-head { display: flex; justify-content: space-between; font-size: 13px; color: #9ab9cb; }
+.promos { border: 0; padding: 0; margin: 14px 0 0; display: grid; gap: 6px; }
+.promos legend { margin-bottom: 7px; }
+.dialog .option { display: flex; gap: 10px; align-items: center; background: #1b2030; border: 1px solid #345467; border-radius: 10px; padding: 8px 12px; margin: 0; cursor: pointer; }
+.option:has(input:checked) { border-color: #ff2d95; }
+.dialog .option input { width: auto; margin: 0; accent-color: #ff2d95; }
+.option span { display: flex; flex-direction: column; }
+.option small { color: #9ab9cb; }
+.option.off { opacity: .45; cursor: not-allowed; }
+
+/* Die Nacht läuft */
+.live { min-height: 190px; }
+.meter { height: 10px; background: #223546; border-radius: 99px; overflow: hidden; }
+.meter i { display: block; width: 0; height: 100%; background: linear-gradient(90deg, #00e5c3, #ff2d95); transition: width .5s; }
+#liveLog { list-style: none; padding: 0; margin: 14px 0 0; line-height: 1.7; }
+#liveLog li::before { content: "♪ "; color: #ff2d95; }
+
+/* Abrechnung und Saisonbilanz */
+.result-top { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 6px 0 12px; }
+.result-top div { background: #223546; border-radius: 8px; padding: 10px; text-align: center; }
+.result-top small { display: block; color: #9ab9cb; font-size: 12px; }
+.result-top b { font-size: 22px; }
+.bill { width: 100%; border-collapse: collapse; font-size: 14px; }
+.bill td { padding: 6px 4px; border-bottom: 1px solid #2a4152; }
+.bill td:last-child { text-align: right; white-space: nowrap; }
+.bill.history td { font-size: 13px; }
+
+@media (max-width: 570px) {
+  .dialog { padding: 18px; }
+  .result-top b { font-size: 18px; }
+  .bill.history td:nth-child(2) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar i, .meter i { transition: none; }
+}

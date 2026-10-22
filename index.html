@@ -28,7 +28,7 @@
         <button data-move="left" aria-label="Nach links">◀</button>
         <button data-move="down" aria-label="Nach unten">▼</button>
         <button data-move="right" aria-label="Nach rechts">▶</button>
-        <button id="touchE">E / Aktion</button>
+        <button id="touchE">E / Betreten</button>
       </div>
     </section>
 
@@ -38,19 +38,23 @@
         <div class="stats">
           <div class="stat"><small>Kapital</small><strong id="money">300 €</strong></div>
           <div class="stat"><small>Ruf</small><strong id="rep">0</strong></div>
-          <div class="stat"><small>Gästezufriedenheit</small><strong id="happy">–</strong></div>
-          <div class="stat"><small>Partys</small><strong id="parties">0</strong></div>
+          <div class="stat"><small>Stimmung</small><strong id="happy">–</strong></div>
+          <div class="stat"><small>Nacht</small><strong id="night">1 / 5</strong></div>
         </div>
       </div>
       <div class="panel">
-        <h2>Mission 01</h2>
-        <div class="mission" id="mission"></div>
+        <h2 id="seasonTitle">Saison 1</h2>
+        <div class="mission" id="season"></div>
+      </div>
+      <div class="panel">
+        <h2>Minispiele</h2>
+        <div class="games" id="minigames"></div>
       </div>
       <div class="panel">
         <h2>Steuerung</h2>
         <div class="controls">
           WASD / Pfeiltasten: durch die Stadt laufen<br>
-          E oder Enter: Gebäude benutzen<br>
+          E oder Enter: Gebäude betreten<br>
           Esc: Fenster schließen<br>
           Minikarte: oben rechts im Spielfeld<br>
           Spielstand wird automatisch gespeichert.
@@ -63,7 +67,7 @@
     </aside>
   </main>
 
-  <footer>GDU Underground City · Chapter 01 · Version 1.0</footer>
+  <footer>GDU Underground City · Chapter 01 · Version 2.0</footer>
 
   <div class="dialog-back" id="back">
     <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
@@ -73,6 +77,13 @@
     </div>
   </div>
 
-  <script src="game.js"></script>
+  <!-- Reihenfolge wichtig: Daten → Berechnung → Kern → Stadt → Orte → Minispiele → Start -->
+  <script src="js/data.js"></script>
+  <script src="js/economy.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/city.js"></script>
+  <script src="js/locations.js"></script>
+  <script src="js/games/party-night.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
