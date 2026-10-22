@@ -1,0 +1,180 @@
+/* GDU Underground City – Warehouse District
+   Layout und Gestaltung der Spielseite. */
+
+:root {
+  color-scheme: dark;
+  font-family: system-ui, 'Segoe UI', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 55% 0, #283c50, #080d17 65%) #080d17;
+  color: #eaf6ff;
+}
+
+/* Kopfbereich */
+header {
+  max-width: 1300px;
+  margin: auto;
+  padding: 20px 20px 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+h1 { margin: 0; font-size: clamp(20px, 3vw, 32px); letter-spacing: 1px; }
+h1 span { color: #ff4baf; }
+.sub { color: #93b1c5; font-size: 13px; }
+.pill { color: #9cefe0; font-size: 12px; }
+
+/* Hauptbereich: Spielfeld links, Seitenleiste rechts */
+main {
+  max-width: 1300px;
+  margin: auto;
+  padding: 12px 20px 25px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 310px;
+  gap: 18px;
+}
+
+.stage {
+  background: #101824;
+  border: 1px solid #45677b;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  min-width: 0;
+  box-shadow: 0 25px 85px #000a, 0 0 0 1px #47e7d322;
+}
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 90px #07111caa;
+  z-index: 1;
+}
+canvas { width: 100%; display: block; aspect-ratio: 1100 / 760; }
+
+#minimap {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  width: 156px;
+  height: 156px;
+  border: 1px solid #61d7c2;
+  border-radius: 8px;
+  background: #07131de8;
+  box-shadow: 0 4px 18px #0009;
+  pointer-events: none;
+}
+
+/* Interaktionshinweis unten im Spielfeld */
+.tip {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #06121de8;
+  border: 1px solid #00d4dc;
+  border-radius: 12px;
+  padding: 10px 14px;
+  text-align: center;
+  max-width: 94%;
+  min-width: 240px;
+  font-weight: 700;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Seitenleiste */
+.side { display: flex; flex-direction: column; gap: 13px; }
+.panel {
+  border: 1px solid #345467;
+  background: #111e2be8;
+  border-radius: 14px;
+  padding: 16px;
+}
+.panel h2 {
+  font-size: 15px;
+  color: #78f5e1;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.stat { background: #223546; border-radius: 8px; padding: 10px; }
+.stat small { display: block; color: #9ab9cb; }
+.stat strong { font-size: 23px; }
+.mission { line-height: 1.7; font-size: 14px; }
+.mission div { padding: 5px 0; }
+.done { color: #74f4c0; }
+.muted { color: #a5b7c4; }
+.controls { font-size: 13px; line-height: 1.7; color: #c1d2df; }
+
+/* Buttons */
+button {
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #ff3f9f;
+  color: #fff;
+}
+button:hover { filter: brightness(1.15); }
+button:disabled { opacity: .4; cursor: not-allowed; }
+button:focus-visible { outline: 3px solid #8afce4; outline-offset: 2px; }
+.secondary { background: #2e485e; }
+.buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Touch-Steuerung (nur auf kleinen Bildschirmen sichtbar) */
+.touch { display: none; justify-content: center; gap: 8px; margin: 12px 0; }
+.touch button { min-width: 46px; min-height: 42px; background: #314e62; }
+
+/* Dialogfenster für Gebäude */
+.dialog-back {
+  position: fixed;
+  inset: 0;
+  background: #000b;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  z-index: 20;
+}
+.dialog-back.open { display: flex; }
+.dialog {
+  width: min(490px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  background: #142535;
+  border: 1px solid #47d6dc;
+  border-radius: 18px;
+  padding: 23px;
+  box-shadow: 0 0 80px #00c5d533;
+}
+.dialog h2 { margin: 0 0 10px; color: #7cf7ea; }
+.dialog p { line-height: 1.55; }
+.dialog label { display: block; margin: 14px 0 7px; }
+.dialog input { width: 100%; accent-color: #f35da9; }
+.dialog .buttons { margin-top: 20px; }
+
+footer { text-align: center; color: #8298aa; font-size: 12px; padding: 12px; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  main { grid-template-columns: 1fr; }
+  .side { display: grid; grid-template-columns: 1fr 1fr; }
+  .touch { display: flex; }
+}
+@media (max-width: 570px) {
+  .side { grid-template-columns: 1fr; }
+  header { display: block; }
+  .tip { font-size: 11px; min-width: 0; width: 90%; }
+  /* Minikarte auf dem Handy verkleinern, damit sie die Stadt nicht verdeckt */
+  #minimap { width: 84px; height: 84px; right: 8px; top: 8px; }
+}
