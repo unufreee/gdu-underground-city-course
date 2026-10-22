@@ -19,7 +19,7 @@ GDU.trendFactor = (trend, dj) => {
 
 /**
  * Berechnet eine Party-Nacht.
- * @param {object} p  { rep, gear, dj, price, promo, trend }
+ * @param {object} p  { rep, gear, dj, price, promo, trend, warmup? }
  * @param {function} rnd  Zufallsfunktion 0..1 (für Tests austauschbar)
  * @returns {object} Ergebnis mit Gästen, Stimmung, Umsätzen, Gewinn und Ruf-Änderung
  */
@@ -34,6 +34,10 @@ GDU.simulateNight = (p, rnd = Math.random) => {
 
   // Stimmung
   let vibe = 50 + p.dj.vibe + (rnd() * 10 - 5);
+  if (p.warmup) {   // Bonus oder Malus aus dem Beat-Battle
+    vibe += p.warmup;
+    events.push(p.warmup > 0 ? 'Marias Warm-up hat die Crowd schon angeheizt.' : 'Das Warm-up holpert. Der DJ muss die Stimmung erst retten.');
+  }
   for (const g of GDU.gear) if (p.gear[g.id] && g.vibe) vibe += g.vibe;
   if (p.price > 12) vibe -= (p.price - 12) * 3;
   if (p.dj.wild) {

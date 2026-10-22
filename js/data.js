@@ -59,7 +59,7 @@ GDU.trends = [
 // Minispiele der Stadt: spielbar oder geplant
 GDU.minigames = [
   { name: 'Party-Nacht',   place: 'Bunker 99',     ready: true },
-  { name: 'Beat-Battle',   place: 'DJ-Pult',       ready: false },
+  { name: 'Beat-Battle',   place: 'Bunker 99 · DJ-Pult', ready: true },
   { name: 'Crate Digging', place: 'Vinyl Junky',   ready: false },
   { name: 'Türsteher',     place: 'Bunker 99',     ready: false }
 ];

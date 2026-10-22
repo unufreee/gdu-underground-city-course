@@ -256,3 +256,14 @@ footer { text-align: center; color: #8298aa; font-size: 12px; padding: 12px; }
 @media (prefers-reduced-motion: reduce) {
   .bar i, .meter i { transition: none; }
 }
+
+/* ===== Version 2.1: Beat-Battle ===== */
+
+.warmup { background: #0f1c28; border-left: 3px solid #00e5c3; border-radius: 6px; padding: 9px 12px; font-size: 14px; }
+.howto { line-height: 1.7; padding-left: 20px; }
+.beat-stage { border-radius: 12px; overflow: hidden; border: 1px solid #345467; }
+.beat-stage canvas { width: 100%; aspect-ratio: 640 / 380; display: block; background: #0b1420; }
+.lanes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+.lane-btn { min-height: 56px; font-size: 18px; background: #223546; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.lane-btn:active { background: #ff2d95; }
+@media (min-width: 900px) and (hover: hover) { .lanes { display: none; } }

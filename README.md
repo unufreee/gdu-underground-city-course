@@ -20,11 +20,24 @@ Eine Saison hat **5 Nächte**. Ziel: **4.000 € Kapital nach der letzten Nacht*
 
 Jede Nacht hat ein **Ereignis** (z. B. Techno-Hype, Semesterstart, Starkregen, Hafenfestival). Wer den DJ passend zum Abend bucht, bekommt deutlich mehr Gäste. Ein zu hoher Eintritt kostet Stimmung und Ruf, zu wenig Werbung kostet Gäste. Rutscht das Kapital unter null, ist der Club pleite.
 
-### Geplante Minispiele
+### Minispiel „Beat-Battle“ (spielbar)
+
+Vor jeder Party kann Maria im Bunker 99 selbst das **Warm-up am DJ-Pult** spielen (Button „Warm-up spielen“ in der Party-Planung). Noten fallen in vier Spuren und werden im Takt getroffen: Tasten D F J K oder Pfeiltasten, auf dem Handy die vier Spur-Buttons. Ein Warm-up dauert etwa 15 Sekunden, das Tempo richtet sich nach dem gebuchten DJ (House 122, Techno 128, Drum & Bass 140 BPM).
+
+| Trefferquote | Stimmung in der Party-Nacht |
+|---|---|
+| ab 90 % | +10 |
+| ab 75 % | +7 |
+| ab 55 % | +4 |
+| ab 35 % | ±0 |
+| darunter | −4 |
+
+Pro Nacht gibt es einen Versuch. Wer abbricht, verbraucht den Versuch ohne Bonus. Die Musik (Kick, Hi-Hat, Snare, Bass) wird live im Browser per Web Audio erzeugt; ohne Ton läuft das Spiel genauso. Das Warm-up ist freiwillig, die Saison bleibt auch ohne es schaffbar.
+
+### Geplante Minispiele (nach dem Kurs)
 
 | Minispiel | Ort | Idee |
 |---|---|---|
-| Beat-Battle | DJ-Pult | Rhythmusspiel: im Takt drücken, Crowd-Energie halten |
 | Crate Digging | Vinyl Junky | Unter Zeitdruck die richtigen Platten für das Set finden |
 | Türsteher | Bunker 99 | Gäste einlassen oder abweisen, die richtige Mischung finden |
 
@@ -36,6 +49,7 @@ Jede Nacht hat ein **Ereignis** (z. B. Techno-Hype, Semesterstart, Starkregen, H
 | Gebäude betreten | E oder Enter (auf dem türkisen Eingangsfeld) | Button „E / Betreten“ |
 | Fenster schließen | Esc | „Zurück“ / „Schließen“ |
 | Im Fenster | Tab wechseln, Enter oder Leertaste auslösen, Pfeiltasten für Regler und Auswahl | antippen |
+| Beat-Battle | D F J K oder Pfeiltasten, Esc bricht ab | Spur-Buttons unter dem Spielfeld |
 
 Weitere Funktionen: Tag/Nacht-Umschaltung, Minikarte, Passanten, automatisches Speichern im Browser (localStorage), „Neues Spiel“ zum kompletten Zurücksetzen.
 
@@ -58,6 +72,7 @@ Weitere Funktionen: Tag/Nacht-Umschaltung, Minikarte, Passanten, automatisches S
 | `js/city.js` | Die Stadt: Karte, Gebäude, Spielfigur, Passanten, Minikarte |
 | `js/locations.js` | Orte: Beat Dealers und Vinyl Junky |
 | `js/games/party-night.js` | Minispiel Party-Nacht: Planung, Nacht, Abrechnung, Saisonende |
+| `js/games/beat-battle.js` | Minispiel Beat-Battle: Notenmuster, Musik per Web Audio, Treffer, Bonus |
 | `js/main.js` | Start, Tastatur- und Touch-Steuerung |
 
 ### Ein neues Minispiel ergänzen
@@ -102,7 +117,8 @@ Hinweis: Für die Tastatursteuerung muss einmal ins Spielfeld geklickt werden, d
 | 0.4 | Passanten, Minikarte, Laufanimation |
 | 0.5 | Überarbeitete Gebäude und Spielfigur, Warteschlange vor Bunker 99 |
 | 1.0 | Kursversion: Code aufgeteilt und kommentiert, Enter-Taste und Fokus in Dialogen repariert, einheitliche Versionsangaben. Gesichert im Branch `version-1.0`. |
-| 2.0 | Stadt als Zentrale für Minispiele. Neues Minispiel **Party-Nacht** mit Saison über 5 Nächte, Saisonziel, 4 DJs, Ausstattung, Werbung, Abend-Ereignissen, Abrechnung, Sieg- und Niederlagebedingung. Warteschlange vor dem Club wächst mit dem Ruf. Code in Module aufgeteilt, Spielbalance per Simulation geprüft. |
+| 2.0 | Stadt als Zentrale für Minispiele. Neues Minispiel **Party-Nacht** mit Saison über 5 Nächte, Saisonziel, 4 DJs, Ausstattung, Werbung, Abend-Ereignissen, Abrechnung, Sieg- und Niederlagebedingung. Warteschlange vor dem Club wächst mit dem Ruf. Code in Module aufgeteilt, Spielbalance per Simulation geprüft. Gesichert im Branch `version-2.0`. |
+| 2.1 | Neues Minispiel **Beat-Battle** am DJ-Pult: Rhythmusspiel mit vier Spuren, live erzeugter Musik je nach DJ-Genre, Stimmungsbonus von −4 bis +10 für die Party-Nacht, ein Versuch pro Nacht, Touch-Buttons für das Handy. Spielstände aus Version 2.0 bleiben erhalten. |
 
 ## Entwicklung
 

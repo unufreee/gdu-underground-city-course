@@ -35,7 +35,9 @@ GDU.newSeason = (keep = {}) => ({
   parties: 0,
   history: [],
   over: false,           // Saison beendet?
-  result: null           // 'won' | 'goal' | 'broke'
+  result: null,          // 'won' | 'goal' | 'broke'
+  warmup: null,          // Ergebnis des Beat-Battles für die aktuelle Nacht
+  mute: false            // Ton im Beat-Battle aus
 });
 
 GDU.load = () => {
@@ -51,6 +53,12 @@ GDU.save = () => {
 };
 
 GDU.state = GDU.load();
+
+// Warm-up (Beat-Battle) der aktuellen Nacht, sonst null
+GDU.warmupTonight = () => {
+  const w = GDU.state.warmup;
+  return w && w.night === GDU.state.night && w.season === GDU.state.season ? w : null;
+};
 
 /* ---------- Seitenleiste ---------- */
 
@@ -80,6 +88,7 @@ GDU.updateHUD = () => {
       '<div class="tonight"><small>Heute Nacht</small><b>' + trend.title + '</b><span>' + trend.text + '</span></div>' +
       step(!!s.gear.sound, 'Soundanlage bei Vinyl Junky') +
       step(!!dj, dj ? 'DJ gebucht: ' + dj.name : 'DJ bei Beat Dealers buchen') +
+      step(GDU.warmupTonight() !== null, 'Optional: Warm-up am DJ-Pult' + (GDU.warmupTonight() ? ' (' + (GDU.warmupTonight().bonus > 0 ? '+' : '') + GDU.warmupTonight().bonus + ' Stimmung)' : '')) +
       step(false, 'Party im Bunker 99 starten');
   }
   if (s.best) html += '<p class="muted small">Bester Saisonabschluss: ' + GDU.euro(s.best) + '</p>';
@@ -147,4 +156,5 @@ GDU.trapFocus = e => {
   else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
 };
 
-back.addEventListener('click', e => { if (e.target === back) GDU.close(); });
+// Klick neben das Fenster schließt es (nicht während des Beat-Battles, damit kein Versehen die Runde beendet)
+back.addEventListener('click', e => { if (e.target === back && !GDU.beatRunning) GDU.close(); });

@@ -46,8 +46,14 @@ function planner() {
     '<fieldset class="promos"><legend>Werbung</legend>' + promos + '</fieldset>' +
     '<p class="small muted">Nach der Party fallen <b>' + GDU.euro(c.operatingCost) + '</b> Betriebskosten an (Miete, Security, Personal).</p>';
 
-  GDU.modal('BUNKER 99 · Party-Nacht', html, [
+  const warm = GDU.warmupTonight();
+  const warmHtml = warm
+    ? '<p class="warmup done-box">Warm-up am DJ-Pult: <b>' + (warm.aborted ? 'abgebrochen, kein Bonus' : warm.acc + ' % getroffen, Stimmung ' + (warm.bonus > 0 ? '+' : '') + warm.bonus) + '</b></p>'
+    : '<p class="warmup">Optional: Spiel vorher selbst das <b>Warm-up am DJ-Pult</b> (Beat-Battle). Gute Treffer bringen bis zu +10 Stimmung.</p>';
+
+  GDU.modal('BUNKER 99 · Party-Nacht', html + warmHtml, [
     ['PARTY STARTEN', startNight],
+    [warm ? 'Warm-up gespielt' : '🎧 Warm-up spielen', () => GDU.beat.open(), !!warm, 'secondary'],
     ['Später', GDU.close, false, 'secondary']
   ]);
 
@@ -73,7 +79,9 @@ function startNight() {
   // Ergebnis sofort berechnen und speichern (die Animation ist nur Show)
   const nightNo = s.night;
   s.money -= promo.price;
-  const r = GDU.simulateNight({ rep: s.rep, gear: s.gear, dj, price, promo, trend });
+  const warm = GDU.warmupTonight();
+  const r = GDU.simulateNight({ rep: s.rep, gear: s.gear, dj, price, promo, trend, warmup: warm ? warm.bonus : 0 });
+  s.warmup = null;
   s.money += r.net;
   s.rep = Math.max(0, s.rep + r.rep);
   s.lastHappy = r.happy;
