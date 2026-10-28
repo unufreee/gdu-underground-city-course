@@ -267,3 +267,16 @@ footer { text-align: center; color: #8298aa; font-size: 12px; padding: 12px; }
 .lane-btn { min-height: 56px; font-size: 18px; background: #223546; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
 .lane-btn:active { background: #ff2d95; }
 @media (min-width: 900px) and (hover: hover) { .lanes { display: none; } }
+
+/* ===== Version 2.2: Fokus-Hinweis und Demo-Modus ===== */
+
+.focus-hint[hidden], .demo-badge[hidden] { display: none; }
+.focus-hint {
+  position: absolute; inset: 0; z-index: 3;
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; border-radius: 0;
+  background: #050a12b8; color: #fff;
+  font-size: clamp(15px, 2.4vw, 22px); letter-spacing: .5px;
+}
+.focus-hint:hover { filter: none; background: #050a12a0; }
+.demo-badge { margin-left: 8px; padding: 2px 8px; border-radius: 99px; background: #ff2d95; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 1px; }

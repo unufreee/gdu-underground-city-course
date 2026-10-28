@@ -106,7 +106,15 @@ Auf der Seite „Spiel starten“ in einem Block **„Individuelles HTML“**:
 
 Das iframe trennt die Gestaltung des Spiels vom Astra-Theme. Änderungen am Spiel werden über GitHub Pages veröffentlicht und erscheinen automatisch auf der WordPress-Seite.
 
-Hinweis: Für die Tastatursteuerung muss einmal ins Spielfeld geklickt werden, damit das iframe den Fokus hat.
+Hinweis: Für die Tastatursteuerung muss einmal ins Spielfeld geklickt werden, damit das iframe den Fokus hat. Solange das Spiel keinen Fokus hat, blendet es selbst den Hinweis „Ins Spiel klicken, um zu starten“ ein.
+
+## Demo-Modus für Präsentationen
+
+Die Adresse **https://unufreee.github.io/gdu-underground-city-course/?demo** startet mit einem vorbereiteten Spielstand: Saison 1, Nacht 3 von 5, 1.250 € Kapital, Ruf 12, Soundanlage und Nebelmaschine gekauft, Ereignis „Techno-Hype“, Maria steht vor Beat Dealers. So lassen sich DJ-Buchung, Beat-Battle, Party-Nacht und Abrechnung in wenigen Minuten zeigen.
+
+- Oben neben dem Kapitel erscheint ein pinkes **DEMO**-Abzeichen.
+- Der Demo-Spielstand wird getrennt gespeichert. Der normale Spielstand bleibt unberührt.
+- „Demo zurücksetzen“ stellt den Anfangsstand der Demo wieder her.
 
 ## Versionshistorie
 
@@ -118,7 +126,8 @@ Hinweis: Für die Tastatursteuerung muss einmal ins Spielfeld geklickt werden, d
 | 0.5 | Überarbeitete Gebäude und Spielfigur, Warteschlange vor Bunker 99 |
 | 1.0 | Kursversion: Code aufgeteilt und kommentiert, Enter-Taste und Fokus in Dialogen repariert, einheitliche Versionsangaben. Gesichert im Branch `version-1.0`. |
 | 2.0 | Stadt als Zentrale für Minispiele. Neues Minispiel **Party-Nacht** mit Saison über 5 Nächte, Saisonziel, 4 DJs, Ausstattung, Werbung, Abend-Ereignissen, Abrechnung, Sieg- und Niederlagebedingung. Warteschlange vor dem Club wächst mit dem Ruf. Code in Module aufgeteilt, Spielbalance per Simulation geprüft. Gesichert im Branch `version-2.0`. |
-| 2.1 | Neues Minispiel **Beat-Battle** am DJ-Pult: Rhythmusspiel mit vier Spuren, live erzeugter Musik je nach DJ-Genre, Stimmungsbonus von −4 bis +10 für die Party-Nacht, ein Versuch pro Nacht, Touch-Buttons für das Handy. Spielstände aus Version 2.0 bleiben erhalten. |
+| 2.1 | Neues Minispiel **Beat-Battle** am DJ-Pult: Rhythmusspiel mit vier Spuren, live erzeugter Musik je nach DJ-Genre, Stimmungsbonus von −4 bis +10 für die Party-Nacht, ein Versuch pro Nacht, Touch-Buttons für das Handy. Spielstände aus Version 2.0 bleiben erhalten. Gesichert im Branch `version-2.1`. |
+| 2.2 | Letzte Version vor dem Feature-Stopp (30.10.): Fokus-Hinweis im iframe („Ins Spiel klicken, um zu starten“), **Demo-Modus** über `?demo` mit vorbereitetem Spielstand für die Präsentation. Spielmechanik, Grafik und Spielstände unverändert. |
 
 ## Entwicklung
 

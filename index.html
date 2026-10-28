@@ -11,7 +11,7 @@
   <header>
     <div>
       <h1>GDU <span>UNDERGROUND CITY</span></h1>
-      <div class="sub">CHAPTER 01 / WAREHOUSE DISTRICT</div>
+      <div class="sub">CHAPTER 01 / WAREHOUSE DISTRICT <span class="demo-badge" id="demoBadge" hidden>DEMO</span></div>
     </div>
     <div class="pill">300 EURO. KEIN CLUB. GROSSE FRESSE.</div>
   </header>
@@ -22,6 +22,7 @@
         <canvas id="world" width="1100" height="760" aria-label="Isometrische Stadtkarte Warehouse District"></canvas>
         <canvas id="minimap" width="156" height="156" aria-label="Minikarte mit Position der Spielfigur"></canvas>
         <div class="tip" id="hint">WASD / Pfeiltasten: bewegen · E: interagieren</div>
+        <button class="focus-hint" id="focusHint" hidden>▶ Ins Spiel klicken, um zu starten</button>
       </div>
       <div class="touch">
         <button data-move="up" aria-label="Nach oben">▲</button>
@@ -67,7 +68,7 @@
     </aside>
   </main>
 
-  <footer>GDU Underground City · Chapter 01 · Version 2.1</footer>
+  <footer>GDU Underground City · Chapter 01 · Version 2.2</footer>
 
   <div class="dialog-back" id="back">
     <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">

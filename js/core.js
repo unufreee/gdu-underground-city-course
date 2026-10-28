@@ -5,7 +5,10 @@
 
 window.GDU = window.GDU || {};
 
-GDU.KEY = 'gdu-city-v2';   // Speicherschlüssel im Browser (localStorage)
+// Demo-Modus für Präsentationen: Adresse mit ?demo startet einen vorbereiteten Spielstand.
+// Er wird unter einem eigenen Schlüssel gespeichert, der normale Spielstand bleibt unberührt.
+GDU.demo = /[?&]demo\b/.test(location.search);
+GDU.KEY = GDU.demo ? 'gdu-city-v2-demo' : 'gdu-city-v2';   // Speicherschlüssel im Browser (localStorage)
 
 GDU.euro = n => n.toLocaleString('de-DE') + ' €';
 GDU.dj = id => GDU.djs.find(d => d.id === id);
@@ -52,7 +55,19 @@ GDU.save = () => {
   try { localStorage.setItem(GDU.KEY, JSON.stringify(GDU.state)); } catch (e) { /* Speichern nicht möglich (z. B. privater Modus) */ }
 };
 
+// Vorbereiteter Spielstand für den Demo-Modus: Nacht 3, Anlage und Nebel gekauft, Geld für jeden DJ außer der Headlinerin
+GDU.demoState = () => ({
+  ...GDU.newSeason(),
+  x: 5, y: 8, money: 1250, rep: 12, night: 3, trend: 'techno', lastHappy: 66, parties: 2,
+  gear: { sound: true, fog: true }, entry: 12, promo: 'flyer',
+  history: [
+    { night: 1, dj: 'DJ Voltage', trend: 'Normaler Freitag', guests: 58, happy: 61, net: 702 },
+    { night: 2, dj: 'Lina Loop', trend: 'Semesterstart', guests: 96, happy: 72, net: 1102 }
+  ]
+});
+
 GDU.state = GDU.load();
+if (GDU.demo && !localStorage.getItem(GDU.KEY)) { GDU.state = GDU.demoState(); GDU.save(); }
 
 // Warm-up (Beat-Battle) der aktuellen Nacht, sonst null
 GDU.warmupTonight = () => {

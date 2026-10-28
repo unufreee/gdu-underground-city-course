@@ -40,14 +40,34 @@ document.getElementById('touchE').addEventListener('click', enter);
 
 document.getElementById('lightMode').addEventListener('click', () => { GDU.view.night = !GDU.view.night; GDU.draw(); });
 document.getElementById('reset').addEventListener('click', () => {
-  if (confirm('Spielstand wirklich komplett zurücksetzen?')) {
-    GDU.state = GDU.newSeason();
+  if (confirm(GDU.demo ? 'Demo auf den Anfangsstand zurücksetzen?' : 'Spielstand wirklich komplett zurücksetzen?')) {
+    GDU.state = GDU.demo ? GDU.demoState() : GDU.newSeason();
     GDU.view.facing = 'down';
     GDU.view.stride = 0;
     GDU.save();
     GDU.draw();
   }
 });
+
+/* ---------- Fokus-Hinweis ----------
+   Im WordPress-iframe empfängt das Spiel Tastendrücke erst nach einem Klick hinein.
+   Solange die Seite keinen Fokus hat, erscheint deshalb ein Hinweis über dem Spielfeld. */
+const focusHint = document.getElementById('focusHint');
+const updateFocusHint = () => {
+  const show = !document.hasFocus() && !GDU.dialogOpen();
+  focusHint.hidden = !show;
+};
+focusHint.addEventListener('click', () => { window.focus(); focusHint.hidden = true; });
+document.querySelector('.stage').addEventListener('pointerdown', () => window.focus());
+window.addEventListener('focus', updateFocusHint);
+window.addEventListener('blur', () => setTimeout(updateFocusHint, 50));
+setTimeout(updateFocusHint, 300);
+
+// Demo-Modus sichtbar machen
+if (GDU.demo) {
+  document.getElementById('demoBadge').hidden = false;
+  document.getElementById('reset').textContent = 'Demo zurücksetzen';
+}
 
 GDU.renderMinigames();
 GDU.draw();
