@@ -8,7 +8,7 @@ window.GDU = window.GDU || {};
 GDU.config = {
   startMoney: 300,      // Startkapital
   nights: 5,            // Nächte pro Saison
-  goal: 4000,           // Saisonziel: Kapital nach der letzten Nacht
+  goal: 5000,           // Saisonziel: Kapital nach der letzten Nacht
   operatingCost: 150,   // Betriebskosten pro Nacht (Miete, Security, Personal)
   capacity: 160,        // maximale Gäste im Bunker 99
   barPerGuest: 4        // Getränkeumsatz pro Gast bei normaler Stimmung
@@ -60,6 +60,6 @@ GDU.trends = [
 GDU.minigames = [
   { name: 'Party-Nacht',   place: 'Bunker 99',     ready: true },
   { name: 'Beat-Battle',   place: 'Bunker 99 · DJ-Pult', ready: true },
-  { name: 'Crate Digging', place: 'Vinyl Junky',   ready: false },
-  { name: 'Türsteher',     place: 'Bunker 99',     ready: false }
+  { name: 'Crate Digging', place: 'Vinyl Junky',   ready: true },
+  { name: 'Türsteher',     place: 'Bunker 99 · Tür', ready: true }
 ];

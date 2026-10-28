@@ -19,7 +19,7 @@ GDU.trendFactor = (trend, dj) => {
 
 /**
  * Berechnet eine Party-Nacht.
- * @param {object} p  { rep, gear, dj, price, promo, trend, warmup? }
+ * @param {object} p  { rep, gear, dj, price, promo, trend, warmup?, door?, crate? }
  * @param {function} rnd  Zufallsfunktion 0..1 (für Tests austauschbar)
  * @returns {object} Ergebnis mit Gästen, Stimmung, Umsätzen, Gewinn und Ruf-Änderung
  */
@@ -28,7 +28,7 @@ GDU.simulateNight = (p, rnd = Math.random) => {
   const events = [];
 
   // Gäste
-  const base = 15 + p.rep * 2 + p.dj.fans + p.promo.guests;
+  const base = 15 + p.rep * 2 + p.dj.fans + p.promo.guests + (p.crate || 0);   // Crate Digging: Gäste-Bonus oder -Malus
   let guests = Math.round(base * GDU.trendFactor(p.trend, p.dj) * GDU.priceFactor(p.price) * (0.9 + rnd() * 0.2));
   if (guests > c.capacity) { guests = c.capacity; events.push('Die Schlange reicht bis zur Metro. Ausverkauft!'); }
 
@@ -37,6 +37,11 @@ GDU.simulateNight = (p, rnd = Math.random) => {
   if (p.warmup) {   // Bonus oder Malus aus dem Beat-Battle
     vibe += p.warmup;
     events.push(p.warmup > 0 ? 'Marias Warm-up hat die Crowd schon angeheizt.' : 'Das Warm-up holpert. Der DJ muss die Stimmung erst retten.');
+  }
+  if (p.crate) events.push(p.crate > 0 ? 'Die neuen Platten aus der Kiste ziehen zusätzliche Fans an.' : 'Ein paar Platten passen nicht ins Set. Manche Fans bleiben weg.');
+  if (p.door) {   // Bonus oder Malus aus dem Türsteher-Spiel
+    vibe += p.door;
+    events.push(p.door > 0 ? 'An der Tür lief alles glatt. Drinnen ist die richtige Crowd.' : 'An der Tür ist einiges schiefgelaufen. Drinnen gibt es Ärger.');
   }
   for (const g of GDU.gear) if (p.gear[g.id] && g.vibe) vibe += g.vibe;
   if (p.price > 12) vibe -= (p.price - 12) * 3;

@@ -40,6 +40,8 @@ GDU.newSeason = (keep = {}) => ({
   over: false,           // Saison beendet?
   result: null,          // 'won' | 'goal' | 'broke'
   warmup: null,          // Ergebnis des Beat-Battles für die aktuelle Nacht
+  door: null,            // Ergebnis des Türsteher-Spiels für die aktuelle Nacht
+  crate: null,           // Ergebnis von Crate Digging für die aktuelle Nacht
   mute: false            // Ton im Beat-Battle aus
 });
 
@@ -70,10 +72,13 @@ GDU.state = GDU.load();
 if (GDU.demo && !localStorage.getItem(GDU.KEY)) { GDU.state = GDU.demoState(); GDU.save(); }
 
 // Warm-up (Beat-Battle) der aktuellen Nacht, sonst null
-GDU.warmupTonight = () => {
-  const w = GDU.state.warmup;
+// Ergebnis eines Minispiels (warmup, door, crate), wenn es zur aktuellen Nacht gehört, sonst null
+GDU.tonight = field => {
+  const w = GDU.state[field];
   return w && w.night === GDU.state.night && w.season === GDU.state.season ? w : null;
 };
+GDU.warmupTonight = () => GDU.tonight('warmup');
+const signed = n => (n > 0 ? '+' : '') + n;
 
 /* ---------- Seitenleiste ---------- */
 
@@ -103,7 +108,9 @@ GDU.updateHUD = () => {
       '<div class="tonight"><small>Heute Nacht</small><b>' + trend.title + '</b><span>' + trend.text + '</span></div>' +
       step(!!s.gear.sound, 'Soundanlage bei Vinyl Junky') +
       step(!!dj, dj ? 'DJ gebucht: ' + dj.name : 'DJ bei Beat Dealers buchen') +
-      step(GDU.warmupTonight() !== null, 'Optional: Warm-up am DJ-Pult' + (GDU.warmupTonight() ? ' (' + (GDU.warmupTonight().bonus > 0 ? '+' : '') + GDU.warmupTonight().bonus + ' Stimmung)' : '')) +
+      step(!!GDU.tonight('crate'), 'Optional: Crate Digging' + (GDU.tonight('crate') ? ' (' + signed(GDU.tonight('crate').guests) + ' Gäste)' : '')) +
+      step(!!GDU.tonight('warmup'), 'Optional: Warm-up am DJ-Pult' + (GDU.tonight('warmup') ? ' (' + signed(GDU.tonight('warmup').bonus) + ' Stimmung)' : '')) +
+      step(!!GDU.tonight('door'), 'Optional: Türsteher' + (GDU.tonight('door') ? ' (' + signed(GDU.tonight('door').bonus) + ' Stimmung)' : '')) +
       step(false, 'Party im Bunker 99 starten');
   }
   if (s.best) html += '<p class="muted small">Bester Saisonabschluss: ' + GDU.euro(s.best) + '</p>';

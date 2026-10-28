@@ -46,14 +46,20 @@ function planner() {
     '<fieldset class="promos"><legend>Werbung</legend>' + promos + '</fieldset>' +
     '<p class="small muted">Nach der Party fallen <b>' + GDU.euro(c.operatingCost) + '</b> Betriebskosten an (Miete, Security, Personal).</p>';
 
-  const warm = GDU.warmupTonight();
-  const warmHtml = warm
-    ? '<p class="warmup done-box">Warm-up am DJ-Pult: <b>' + (warm.aborted ? 'abgebrochen, kein Bonus' : warm.acc + ' % getroffen, Stimmung ' + (warm.bonus > 0 ? '+' : '') + warm.bonus) + '</b></p>'
-    : '<p class="warmup">Optional: Spiel vorher selbst das <b>Warm-up am DJ-Pult</b> (Beat-Battle). Gute Treffer bringen bis zu +10 Stimmung.</p>';
+  // Optionale Minispiele vor der Party: Status und Effekt für heute Nacht
+  const sg = n => (n > 0 ? '+' : '') + n;
+  const warm = GDU.tonight('warmup'), door = GDU.tonight('door'), crate = GDU.tonight('crate');
+  const line = (done, text) => '<li class="' + (done ? 'done' : 'muted') + '">' + (done ? '✓ ' : '○ ') + text + '</li>';
+  const extras = '<div class="warmup"><b>Vor der Party (optional):</b><ul class="extras">' +
+    line(!!crate, crate ? 'Crate Digging: ' + (crate.aborted ? 'abgebrochen' : crate.hits + ' Treffer') + ', <b>' + sg(crate.guests) + ' Gäste</b>' : 'Crate Digging bei Vinyl Junky: passende Platten bringen bis zu +18 Gäste') +
+    line(!!warm, warm ? 'Warm-up: ' + (warm.aborted ? 'abgebrochen' : warm.acc + ' % getroffen') + ', <b>' + sg(warm.bonus) + ' Stimmung</b>' : 'Warm-up am DJ-Pult (Beat-Battle): bis zu +10 Stimmung') +
+    line(!!door, door ? 'Türsteher: ' + (door.aborted ? 'abgebrochen' : door.acc + ' % richtig') + ', <b>' + sg(door.bonus) + ' Stimmung</b>' : 'Türsteher: die richtige Crowd reinlassen, bis zu +6 Stimmung') +
+    '</ul></div>';
 
-  GDU.modal('BUNKER 99 · Party-Nacht', html + warmHtml, [
+  GDU.modal('BUNKER 99 · Party-Nacht', html + extras, [
     ['PARTY STARTEN', startNight],
-    [warm ? 'Warm-up gespielt' : '🎧 Warm-up spielen', () => GDU.beat.open(), !!warm, 'secondary'],
+    [warm ? 'Warm-up gespielt' : '🎧 Warm-up', () => GDU.beat.open(), !!warm, 'secondary'],
+    [door ? 'Tür erledigt' : '🚪 Türsteher', () => GDU.door.open(), !!door, 'secondary'],
     ['Später', GDU.close, false, 'secondary']
   ]);
 
@@ -79,9 +85,10 @@ function startNight() {
   // Ergebnis sofort berechnen und speichern (die Animation ist nur Show)
   const nightNo = s.night;
   s.money -= promo.price;
-  const warm = GDU.warmupTonight();
-  const r = GDU.simulateNight({ rep: s.rep, gear: s.gear, dj, price, promo, trend, warmup: warm ? warm.bonus : 0 });
-  s.warmup = null;
+  const warm = GDU.tonight('warmup'), door = GDU.tonight('door'), crate = GDU.tonight('crate');
+  const r = GDU.simulateNight({ rep: s.rep, gear: s.gear, dj, price, promo, trend,
+    warmup: warm ? warm.bonus : 0, door: door ? door.bonus : 0, crate: crate ? crate.guests : 0 });
+  s.warmup = null; s.door = null; s.crate = null;
   s.money += r.net;
   s.rep = Math.max(0, s.rep + r.rep);
   s.lastHappy = r.happy;

@@ -65,12 +65,18 @@ GDU.places.store = () => {
       '<button data-buy="' + g.id + '"' + (owned || s.money < g.price ? ' disabled' : '') + '>' + (owned ? label : s.money < g.price ? 'Zu teuer' : label) + '</button></div>';
   }).join('');
 
-  const soon = '<div class="card soon"><div class="card-head"><b>Crate Digging</b><span class="tag">demnächst</span></div>' +
-    '<p>Finde unter Zeitdruck die richtigen Platten für dein Set. Neues Minispiel in Arbeit.</p></div>';
+  // Minispiel Crate Digging: einmal pro Nacht, braucht einen gebuchten DJ
+  const crate = GDU.tonight('crate');
+  const soon = '<div class="card' + (crate ? ' picked' : '') + '"><div class="card-head"><b>Crate Digging</b><span class="tag hot">Minispiel</span></div>' +
+    '<p>' + (crate ? 'Heute schon gewühlt: ' + crate.hits + ' Treffer, ' + (crate.guests > 0 ? '+' : '') + crate.guests + ' Gäste.' : 'Finde in 25 Sekunden passende Platten für das Set deines DJs. Bringt bis zu +18 Gäste.') + '</p>' +
+    '<button id="crateBtn"' + (crate ? ' disabled' : '') + '>' + (crate ? 'Erledigt' : '🎵 In der Kiste wühlen') + '</button></div>';
 
   GDU.modal('VINYL JUNKY · Plattenladen',
     '<p>Kapital: <b>' + GDU.euro(s.money) + '</b>. Gekaufte Technik bleibt die ganze Saison.</p><div class="cards">' + items + soon + '</div>',
     [['Zurück', GDU.close, false, 'secondary']], true);
+
+  const cb = document.getElementById('crateBtn');
+  if (cb) cb.addEventListener('click', () => GDU.crate.open());
 
   document.querySelectorAll('[data-buy]').forEach(btn => btn.addEventListener('click', () => {
     const g = GDU.gear.find(x => x.id === btn.dataset.buy);

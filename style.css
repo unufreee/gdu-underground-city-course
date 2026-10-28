@@ -280,3 +280,34 @@ footer { text-align: center; color: #8298aa; font-size: 12px; padding: 12px; }
 }
 .focus-hint:hover { filter: none; background: #050a12a0; }
 .demo-badge { margin-left: 8px; padding: 2px 8px; border-radius: 99px; background: #ff2d95; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+
+/* ===== Version 2.3: Türsteher und Crate Digging ===== */
+
+.rules { line-height: 1.7; padding-left: 20px; margin: 6px 0; }
+.small-h { font-size: 14px; margin: 14px 0 0; color: #ffb3d6; text-transform: uppercase; letter-spacing: 1px; }
+.extras { list-style: none; padding: 0; margin: 6px 0 0; line-height: 1.7; font-size: 13px; }
+.door-stage { display: flex; gap: 18px; align-items: center; background: #0b1420; border: 1px solid #345467; border-radius: 12px; padding: 16px; min-height: 170px; }
+.guest-svg { width: 90px; height: 135px; flex: none; }
+.door-stage.sway .guest-svg { animation: sway 1.4s ease-in-out infinite; transform-origin: 50% 100%; }
+@keyframes sway { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(5deg); } }
+.guest-name { font-size: 20px; }
+.facts-list { list-style: none; padding: 0; margin: 8px 0 0; line-height: 1.75; font-size: 14px; }
+.door-timer { height: 6px; background: #223546; border-radius: 99px; overflow: hidden; margin: 12px 0 4px; }
+.door-timer i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #ff2d95, #00e5c3); }
+.door-rules { font-size: 13px; color: #c1d2df; margin-top: 8px; }
+.door-rules summary { cursor: pointer; }
+.crate-head { display: flex; justify-content: space-between; font-size: 14px; }
+.crate { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+.record { position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-height: 92px; padding: 10px; text-align: left; font-weight: 400;
+  background: linear-gradient(180deg, var(--sleeve) 0 30%, #1b2030 30%); border: 1px solid #345467; padding-top: 34px; }
+.record b { font-size: 13px; margin-top: auto; color: #fff; }
+.record small { font-size: 12px; color: #c1d2df; }
+.record .disc { position: absolute; right: 8px; top: -26px; width: 54px; height: 54px; border-radius: 50%; background: radial-gradient(circle, #f7f7f7 0 4px, #111 5px 14px, #262626 15px 16px, #111 17px); opacity: .85; }
+.record.hit { outline: 3px solid #00e5c3; opacity: 1; }
+.record.miss { outline: 3px solid #ff2d95; opacity: .55; }
+.record:disabled { cursor: default; }
+@media (max-width: 570px) {
+  .crate { grid-template-columns: repeat(2, 1fr); }
+  .door-stage { flex-direction: column; text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) { .door-stage.sway .guest-svg { animation: none; } }

@@ -12,7 +12,7 @@ Du steuerst Maria durch den Warehouse District. Die Stadt ist die **Zentrale**: 
 
 ### Minispiel „Party-Nacht“ (spielbar)
 
-Eine Saison hat **5 Nächte**. Ziel: **4.000 € Kapital nach der letzten Nacht**. Startkapital: 300 €.
+Eine Saison hat **5 Nächte**. Ziel: **5.000 € Kapital nach der letzten Nacht**. Startkapital: 300 €.
 
 1. **Vinyl Junky** (Plattenladen): Soundanlage kaufen (Pflicht), später Nebelmaschine, Lichtshow und Bar-Upgrade für mehr Stimmung und Umsatz.
 2. **Beat Dealers** (DJ-Agentur): Für jede Nacht einen DJ buchen. Jeder DJ hat Genre, Gage, Fans und Einfluss auf die Stimmung. Die Headlinerin Nova Black bucht nur, wer genug Ruf hat.
@@ -34,12 +34,24 @@ Vor jeder Party kann Maria im Bunker 99 selbst das **Warm-up am DJ-Pult** spiele
 
 Pro Nacht gibt es einen Versuch. Wer abbricht, verbraucht den Versuch ohne Bonus. Die Musik (Kick, Hi-Hat, Snare, Bass) wird live im Browser per Web Audio erzeugt; ohne Ton läuft das Spiel genauso. Das Warm-up ist freiwillig, die Saison bleibt auch ohne es schaffbar.
 
-### Geplante Minispiele (nach dem Kurs)
+### Minispiel „Türsteher“ (spielbar)
 
-| Minispiel | Ort | Idee |
-|---|---|---|
-| Crate Digging | Vinyl Junky | Unter Zeitdruck die richtigen Platten für das Set finden |
-| Türsteher | Bunker 99 | Gäste einlassen oder abweisen, die richtige Mischung finden |
+In der Party-Planung im Bunker 99 über „🚪 Türsteher“. Zehn Gäste kommen einzeln an die Tür, für jeden gibt es 6 Sekunden: **Rein** (D oder →) oder **Draußen** (A oder ←).
+
+Regeln: Ohne Ausweis kein Einlass. Wer betrunken ist, bleibt draußen, auch mit Gästeliste. Wer auf der Gästeliste steht, kommt rein, egal was er anhat. Dazu kommt eine wechselnde Kleiderregel pro Nacht (dunkler Dresscode, kein Dresscode oder Motto „Neon Night“). Pro Runde dürfen immer 4 bis 6 von 10 Gästen rein, damit sich stures Durchwinken nicht lohnt.
+
+| Richtige Entscheidungen | Stimmung in der Party-Nacht |
+|---|---|
+| ab 90 % | +6 |
+| ab 70 % | +3 |
+| ab 50 % | ±0 |
+| darunter | −5 |
+
+### Minispiel „Crate Digging“ (spielbar)
+
+Bei Vinyl Junky über „🎵 In der Kiste wühlen“, sobald ein DJ gebucht ist. In 25 Sekunden bis zu 6 Platten aus einer Kiste mit 16 wählen, die zum Set passen: richtiges Genre **und** passendes Tempo (House 118–126, Techno 126–136, Drum & Bass 170–176 BPM). Jede richtige Platte bringt **+3 Gäste**, jede falsche kostet **3 Gäste**, also höchstens +18.
+
+Alle drei Zusatzspiele (Crate Digging, Warm-up, Türsteher) sind freiwillig und einmal pro Nacht spielbar. Ihr Ergebnis gilt für die nächste Party und wird in der Party-Planung und in der Seitenleiste angezeigt.
 
 ## Steuerung
 
@@ -50,6 +62,8 @@ Pro Nacht gibt es einen Versuch. Wer abbricht, verbraucht den Versuch ohne Bonus
 | Fenster schließen | Esc | „Zurück“ / „Schließen“ |
 | Im Fenster | Tab wechseln, Enter oder Leertaste auslösen, Pfeiltasten für Regler und Auswahl | antippen |
 | Beat-Battle | D F J K oder Pfeiltasten, Esc bricht ab | Spur-Buttons unter dem Spielfeld |
+| Türsteher | D oder → = Rein, A oder ← = Draußen | Buttons „Rein“ / „Draußen“ |
+| Crate Digging | Tab und Enter | Platten antippen |
 
 Weitere Funktionen: Tag/Nacht-Umschaltung, Minikarte, Passanten, automatisches Speichern im Browser (localStorage), „Neues Spiel“ zum kompletten Zurücksetzen.
 
@@ -73,6 +87,8 @@ Weitere Funktionen: Tag/Nacht-Umschaltung, Minikarte, Passanten, automatisches S
 | `js/locations.js` | Orte: Beat Dealers und Vinyl Junky |
 | `js/games/party-night.js` | Minispiel Party-Nacht: Planung, Nacht, Abrechnung, Saisonende |
 | `js/games/beat-battle.js` | Minispiel Beat-Battle: Notenmuster, Musik per Web Audio, Treffer, Bonus |
+| `js/games/door.js` | Minispiel Türsteher: Gäste, Regeln des Abends, Zeitlimit, Bonus |
+| `js/games/crate-digging.js` | Minispiel Crate Digging: Plattenkiste nach Genre und BPM, Gäste-Bonus |
 | `js/main.js` | Start, Tastatur- und Touch-Steuerung |
 
 ### Ein neues Minispiel ergänzen
@@ -83,15 +99,14 @@ Weitere Funktionen: Tag/Nacht-Umschaltung, Minikarte, Passanten, automatisches S
 
 ### Spielbalance
 
-Die Zahlen in `js/data.js` wurden mit einer Simulation von je 4.000 Saisons geprüft:
+Die Zahlen in `js/data.js` wurden mit einer Simulation von je 4.000 Saisons geprüft. Mit Version 2.3 stieg das Saisonziel von 4.000 € auf 5.000 €, weil die neuen Minispiele zusätzliche Gäste und Stimmung bringen. So zählen die Minispiele spürbar:
 
-| Spielweise | Ziel erreicht |
-|---|---|
-| Durchdacht (DJ passend zum Abend, Werbung, Technik) | ca. 100 % |
-| Solide (immer DJ Voltage, 12 € Eintritt, Flyer) | ca. 60 % |
-| Zufällige Entscheidungen | ca. 5 % |
-| Immer der billigste DJ ohne Werbung | 0 % |
-| Abzocke (25 € Eintritt) | 0 % |
+| Spielweise | ohne Minispiele | mit mittleren Minispiel-Ergebnissen | mit guten Minispiel-Ergebnissen |
+|---|---|---|---|
+| Durchdacht (DJ passend zum Abend, Werbung, Technik) | ca. 99 % | ca. 100 % | ca. 100 % |
+| Solide (immer DJ Voltage, 12 € Eintritt, Flyer) | ca. 8 % | ca. 55 % | ca. 87 % |
+| Zufällige Entscheidungen | ca. 0 % | ca. 4 % | ca. 13 % |
+| Billigster DJ ohne Werbung / Abzocke mit 25 € Eintritt | 0 % | 0 % | 0 % |
 
 ## Einbindung in WordPress
 
@@ -127,7 +142,8 @@ Die Adresse **https://unufreee.github.io/gdu-underground-city-course/?demo** sta
 | 1.0 | Kursversion: Code aufgeteilt und kommentiert, Enter-Taste und Fokus in Dialogen repariert, einheitliche Versionsangaben. Gesichert im Branch `version-1.0`. |
 | 2.0 | Stadt als Zentrale für Minispiele. Neues Minispiel **Party-Nacht** mit Saison über 5 Nächte, Saisonziel, 4 DJs, Ausstattung, Werbung, Abend-Ereignissen, Abrechnung, Sieg- und Niederlagebedingung. Warteschlange vor dem Club wächst mit dem Ruf. Code in Module aufgeteilt, Spielbalance per Simulation geprüft. Gesichert im Branch `version-2.0`. |
 | 2.1 | Neues Minispiel **Beat-Battle** am DJ-Pult: Rhythmusspiel mit vier Spuren, live erzeugter Musik je nach DJ-Genre, Stimmungsbonus von −4 bis +10 für die Party-Nacht, ein Versuch pro Nacht, Touch-Buttons für das Handy. Spielstände aus Version 2.0 bleiben erhalten. Gesichert im Branch `version-2.1`. |
-| 2.2 | Letzte Version vor dem Feature-Stopp (30.10.): Fokus-Hinweis im iframe („Ins Spiel klicken, um zu starten“), **Demo-Modus** über `?demo` mit vorbereitetem Spielstand für die Präsentation. Spielmechanik, Grafik und Spielstände unverändert. |
+| 2.2 | Letzte Version vor dem Feature-Stopp (30.10.): Fokus-Hinweis im iframe („Ins Spiel klicken, um zu starten“), **Demo-Modus** über `?demo` mit vorbereitetem Spielstand für die Präsentation. Spielmechanik, Grafik und Spielstände unverändert. Gesichert im Branch `version-2.2`. |
+| 2.3 | Zwei neue Minispiele: **Türsteher** (Gäste nach Regeln einlassen, −5 bis +6 Stimmung) und **Crate Digging** (passende Platten nach Genre und BPM finden, −18 bis +18 Gäste). Party-Planung und Seitenleiste zeigen alle drei Zusatzspiele. Saisonziel von 4.000 € auf 5.000 € angehoben, Balance per Simulation neu geprüft. Spielstände aus 2.2 und Demo-Modus bleiben erhalten. |
 
 ## Entwicklung
 
