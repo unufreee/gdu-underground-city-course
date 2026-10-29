@@ -311,3 +311,19 @@ footer { text-align: center; color: #8298aa; font-size: 12px; padding: 12px; }
   .door-stage { flex-direction: column; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) { .door-stage.sway .guest-svg { animation: none; } }
+
+/* ===== Version 3.0: Live-Party ===== */
+
+.show-stage { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid #345467; }
+.show-stage canvas { display: block; width: 100%; aspect-ratio: 640 / 360; background: #05060b; }
+.show-ticker { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); max-width: 92%; padding: 8px 14px; border-radius: 10px;
+  background: #050a12d9; border: 1px solid #ff2d95; font-weight: 700; font-size: 14px; text-align: center; }
+.show-ticker:empty { display: none; }
+.show-ticker.pop { animation: pop .35s ease-out; }
+@keyframes pop { from { transform: translate(-50%, 8px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+.show-log { list-style: none; padding: 0; margin: 8px 0 0; font-size: 13px; line-height: 1.6; color: #c1d2df; max-height: 7.5em; overflow: auto; }
+.show-log li::before { content: "♪ "; color: #ff2d95; }
+#dialogActions button.ready { box-shadow: 0 0 0 3px #00e5c355; }
+.season-title { font-size: 18px; }
+.season-title b { color: #ff8fc4; }
+@media (prefers-reduced-motion: reduce) { .show-ticker.pop { animation: none; } }

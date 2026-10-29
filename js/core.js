@@ -26,6 +26,8 @@ GDU.newSeason = (keep = {}) => ({
   x: keep.x ?? 10, y: keep.y ?? 12,
   season: (keep.season ?? 0) + 1,
   best: keep.best ?? 0,
+  hall: keep.hall ?? [],       // Bestenliste der besten Saisons (max. 5)
+  mute: keep.mute ?? false,    // Ton aus
   money: GDU.config.startMoney,
   rep: 0,
   night: 1,
@@ -78,6 +80,23 @@ GDU.tonight = field => {
   return w && w.night === GDU.state.night && w.season === GDU.state.season ? w : null;
 };
 GDU.warmupTonight = () => GDU.tonight('warmup');
+
+// Titel nach Saisonergebnis
+GDU.seasonTitle = (money, result) =>
+  result === 'broke' ? 'Pleitegeier' :
+  money >= 9000 ? 'Königin der Nacht' :
+  money >= 7000 ? 'Club-Legende' :
+  money >= GDU.config.goal ? 'Szene-Größe' :
+  money >= 2500 ? 'Szene-Insider' : 'Kellerkind';
+
+// Abgeschlossene Saison in die Bestenliste (Top 5 nach Kapital) eintragen
+GDU.recordSeason = () => {
+  const s = GDU.state;
+  s.hall = (s.hall || []).filter(h => h.season !== s.season);
+  s.hall.push({ season: s.season, money: s.money, result: s.result, title: GDU.seasonTitle(s.money, s.result) });
+  s.hall.sort((a, b) => b.money - a.money);
+  s.hall = s.hall.slice(0, 5);
+};
 const signed = n => (n > 0 ? '+' : '') + n;
 
 /* ---------- Seitenleiste ---------- */
@@ -113,7 +132,8 @@ GDU.updateHUD = () => {
       step(!!GDU.tonight('door'), 'Optional: Türsteher' + (GDU.tonight('door') ? ' (' + signed(GDU.tonight('door').bonus) + ' Stimmung)' : '')) +
       step(false, 'Party im Bunker 99 starten');
   }
-  if (s.best) html += '<p class="muted small">Bester Saisonabschluss: ' + GDU.euro(s.best) + '</p>';
+  if (s.hall && s.hall.length) html += '<p class="muted small">Bestleistung: ' + GDU.euro(s.hall[0].money) + ' · ' + s.hall[0].title + '</p>';
+  else if (s.best) html += '<p class="muted small">Bester Saisonabschluss: ' + GDU.euro(s.best) + '</p>';
   $('season').innerHTML = html;
   $('seasonTitle').textContent = 'Saison ' + s.season;
 };

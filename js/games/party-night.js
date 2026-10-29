@@ -104,6 +104,7 @@ function startNight() {
     s.over = true;
     s.result = broke ? 'broke' : s.money >= c.goal ? 'won' : 'goal';
     s.best = Math.max(s.best, s.money);
+    GDU.recordSeason();
   } else {
     s.night++;
     s.trend = GDU.rollTrend(s.trend);
@@ -119,20 +120,8 @@ function startNight() {
   ];
 
   GDU.holdHUD = true;   // Ergebnis in der Seitenleiste erst bei der Abrechnung zeigen
-  GDU.modal('Nacht ' + nightNo + ' läuft …',
-    '<div class="live"><div class="meter"><i id="liveBar"></i></div><ul id="liveLog" aria-live="polite"></ul></div>',
-    [['Zur Abrechnung', () => settlement(report)]]);
-
-  const log = document.getElementById('liveLog'), bar = document.getElementById('liveBar');
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  lines.forEach((text, i) => {
-    const show = () => {
-      if (!document.body.contains(log)) return;
-      const li = document.createElement('li'); li.textContent = text; log.append(li);
-      bar.style.width = Math.round((i + 1) / lines.length * 100) + '%';
-    };
-    reduced ? show() : setTimeout(show, 450 + i * 650);
-  });
+  // Live-Szene: DJ, tanzende Crowd, Licht und Musik. Das Ergebnis steht schon fest.
+  GDU.liveShow.play({ nightNo, r, dj, gear: s.gear, lines, onDone: () => settlement(report) });
 }
 
 /* ---------- 3. Abrechnung ---------- */
@@ -169,6 +158,7 @@ function endSeason(result) {
   s.over = true;
   s.result = result;
   s.best = Math.max(s.best, s.money);
+  GDU.recordSeason();
   GDU.save();
   seasonResult();
 }
@@ -189,12 +179,17 @@ function seasonResult() {
     '<tr><td>Nacht ' + h.night + '</td><td>' + h.dj + '</td><td>' + h.guests + ' Gäste</td><td>' + h.happy + ' %</td><td class="' + (h.net >= 0 ? 'done' : 'warn') + '">' + (h.net >= 0 ? '+' : '−') + GDU.euro(Math.abs(h.net)) + '</td></tr>'
   ).join('');
 
+  const title = GDU.seasonTitle(s.money, s.result);
+  const hall = (s.hall || []).map((h, i) =>
+    '<tr class="' + (h.season === s.season ? 'done' : '') + '"><td>' + (i + 1) + '.</td><td>Saison ' + h.season + '</td><td>' + h.title + '</td><td>' + GDU.euro(h.money) + '</td></tr>').join('');
   GDU.modal(titles[s.result] || 'SAISON VORBEI',
+    '<p class="season-title">Dein Titel: <b>' + title + '</b></p>' +
     '<p>' + texts[s.result] + '</p>' +
     '<div class="result-top"><div><small>Kapital</small><b>' + GDU.euro(s.money) + '</b></div><div><small>Ruf</small><b>' + s.rep + '</b></div><div><small>Partys</small><b>' + s.parties + '</b></div></div>' +
-    (rows ? '<table class="bill history">' + rows + '</table>' : ''),
+    (rows ? '<table class="bill history">' + rows + '</table>' : '') +
+    (hall ? '<h3 class="small-h">Bestenliste</h3><table class="bill history">' + hall + '</table>' : ''),
     [['Neue Saison starten', () => {
-      GDU.state = GDU.newSeason({ x: s.x, y: s.y, season: s.season, best: s.best });
+      GDU.state = GDU.newSeason({ x: s.x, y: s.y, season: s.season, best: s.best, hall: s.hall, mute: s.mute });
       GDU.save();
       GDU.close();
     }], ['Schließen', GDU.close, false, 'secondary']], true);

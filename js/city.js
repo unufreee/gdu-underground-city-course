@@ -37,7 +37,8 @@ GDU.npcs = [
   { x: 8,  y: 8,  shirt: '#b7d87a', hair: '#3a2534', home: [8, 8] }
 ];
 
-GDU.view = { night: true, facing: 'down', stride: 0 };
+GDU.view = { night: true, facing: 'down', stride: 0, t: 0 };   // t = Animationszeit in Sekunden
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------- Zeichenwerkzeuge ---------- */
 
@@ -79,7 +80,9 @@ function sign(text, x, y, color = '#8fffea', size = 12) {
   ctx.textAlign = 'center';
   ctx.font = '900 ' + size + 'px system-ui';
   ctx.shadowColor = color;
-  ctx.shadowBlur = GDU.view.night ? 18 : 3;
+  // Neon „atmet“ leicht (kein Blinken)
+  const breathe = REDUCED ? 1 : 0.8 + 0.2 * Math.sin(GDU.view.t * 2.1 + x * 0.05);
+  ctx.shadowBlur = GDU.view.night ? 18 * breathe : 3;
   ctx.fillStyle = color;
   ctx.fillText(text, x, y);
   ctx.restore();
@@ -151,6 +154,26 @@ function building(b) {
   sign(b.name, mid.x, mid.y - h + 21, b.id === 'club' ? '#ff71ce' : b.id === 'agency' ? '#ffb06e' : '#f7d77b', 14);
   ctx.save(); ctx.textAlign = 'center'; ctx.font = 'bold 10px system-ui'; ctx.fillStyle = '#e3eef5'; ctx.fillText(b.subtitle, mid.x, mid.y - h + 35); ctx.restore();
 
+  if (b.id === 'club' && GDU.view.night && GDU.state.gear.light && !GDU.state.over) {   // Lichtshow gekauft: Laser über dem Bunker
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.lineWidth = 2;
+    for (let i = 0; i < 5; i++) {
+      const a = -Math.PI / 2 + (i - 2) * 0.32 + (REDUCED ? 0 : Math.sin(GDU.view.t * 0.8 + i * 1.3) * 0.25);
+      const g = ctx.createLinearGradient(mid.x, mid.y - h - 8, mid.x + Math.cos(a) * 260, mid.y - h - 8 + Math.sin(a) * 260);
+      g.addColorStop(0, i % 2 ? 'rgba(0,229,195,0.75)' : 'rgba(255,45,149,0.75)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.strokeStyle = g;
+      ctx.beginPath(); ctx.moveTo(mid.x, mid.y - h - 8); ctx.lineTo(mid.x + Math.cos(a) * 260, mid.y - h - 8 + Math.sin(a) * 260); ctx.stroke();
+    }
+    ctx.restore();
+  }
+  if (b.id === 'club' && GDU.state.gear.fog) {   // Nebelmaschine gekauft: Nebel quillt aus der Tür
+    const dp = iso(...b.door);
+    for (let i = 0; i < 4; i++) {
+      const k = REDUCED ? i / 4 : ((GDU.view.t * 0.25 + i / 4) % 1);
+      const g = ctx.createRadialGradient(dp.x - 20 * k, dp.y - 10 - 30 * k, 0, dp.x - 20 * k, dp.y - 10 - 30 * k, 26 + 30 * k);
+      g.addColorStop(0, 'rgba(190,180,230,' + (0.12 * (1 - k)) + ')'); g.addColorStop(1, 'rgba(190,180,230,0)');
+      ctx.fillStyle = g; ctx.fillRect(dp.x - 90, dp.y - 110, 180, 150);
+    }
+  }
   if (b.id === 'club') { // Warteschlange: wird mit dem Ruf des Clubs länger
     const q = iso(6, 10);
     const people = 3 + Math.min(5, Math.floor(GDU.state.rep / 5));
@@ -226,7 +249,7 @@ function drawMiniMap() {
 
 /* ---------- Gesamtbild ---------- */
 
-GDU.draw = () => {
+GDU.draw = (sceneOnly = false) => {   // sceneOnly: nur Bild neu zeichnen (Animation), Seitenleiste nicht
   const night = GDU.view.night, s = GDU.state;
   ctx.clearRect(0, 0, 1100, 760);
 
@@ -292,9 +315,20 @@ GDU.draw = () => {
     sign(t, p.x, p.y + 5, t === 'FOOD' ? '#ffd68b' : '#81f8e5', 11);
   }
 
+  // Regen beim Ereignis „Starkregen“
+  if (s.trend === 'rain' && !s.over) {
+    ctx.save(); ctx.strokeStyle = night ? 'rgba(160,200,230,0.35)' : 'rgba(230,240,250,0.45)'; ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let i = 0; i < 140; i++) {
+      const x0 = (i * 97.3) % 1100, y0 = ((i * 53.7) + (REDUCED ? 0 : GDU.view.t * 520)) % 800 - 40;
+      ctx.moveTo(x0, y0); ctx.lineTo(x0 - 6, y0 + 18);
+    }
+    ctx.stroke(); ctx.restore();
+  }
+
   const near = GDU.doorHere();
   hint.textContent = near ? '[E] ' + near.name + ' betreten' : 'WASD / Pfeiltasten: bewegen · E: interagieren';
-  GDU.updateHUD();
+  if (!sceneOnly) GDU.updateHUD();
   drawMiniMap();
 };
 

@@ -53,6 +53,26 @@ Bei Vinyl Junky über „🎵 In der Kiste wühlen“, sobald ein DJ gebucht ist
 
 Alle drei Zusatzspiele (Crate Digging, Warm-up, Türsteher) sind freiwillig und einmal pro Nacht spielbar. Ihr Ergebnis gilt für die nächste Party und wird in der Party-Planung und in der Seitenleiste angezeigt.
 
+### Live-Party (ab Version 3.0)
+
+Startet man im Bunker 99 die Party, läuft sie als animierte Szene ab: DJ am Pult, eine tanzende Crowd (Anzahl nach Gästen, Sprunghöhe und Arme oben nach Stimmung), Laserfächer bei gekaufter Lichtshow, Bodennebel bei Nebelmaschine, beleuchtete Bar beim Bar-Upgrade. Dazu spielt Club-Musik im Genre des DJs, live im Browser erzeugt. Die Ereignisse des Abends erscheinen als Einblendung. Gäste und Stimmung zählen hoch, nach etwa 11 Sekunden geht es zur Abrechnung. Die Szene lässt sich jederzeit mit „Zur Abrechnung“ überspringen, das Ergebnis steht vorher fest.
+
+### Lebendige Stadt (ab Version 3.0)
+
+- Neonschilder leuchten sanft pulsierend (kein Blinken).
+- Mit gekaufter Lichtshow schießen nachts Laser aus dem Dach von Bunker 99, mit Nebelmaschine quillt Nebel aus der Tür.
+- Beim Ereignis „Starkregen“ regnet es über dem Viertel.
+- **Bass durch die Wand:** Je näher Maria an Bunker 99 steht, desto lauter und klarer wird der gedämpfte Bass aus dem Club.
+- Schalter **„Ton an / Ton aus“** in der Steuerung gilt für alle Klänge und wird gespeichert. Ton startet erst nach dem ersten Tastendruck oder Klick (Browser-Regel).
+
+### Titel und Bestenliste (ab Version 3.0)
+
+Am Saisonende gibt es einen Titel nach Kapital: Kellerkind (unter 2.500 €), Szene-Insider, Szene-Größe (Ziel erreicht), Club-Legende (ab 7.000 €), Königin der Nacht (ab 9.000 €), bei Pleite „Pleitegeier“. Die fünf besten Saisons stehen in der Bestenliste; die Bestleistung zeigt auch die Seitenleiste.
+
+### Barrierefreiheit und Effekte
+
+Höchstens 3 Lichtblitze pro Sekunde (der Strobe in der Live-Party blitzt nur alle zwei Takte und nur bei sehr guter Stimmung). Bei der Systemeinstellung „Bewegung reduzieren“ steht die Stadt still, die Crowd tanzt nicht, Laser schwenken nicht, Regen und Nebel ziehen nicht, und es gibt keinen Strobe.
+
 ## Steuerung
 
 | Aktion | Tastatur | Touch |
@@ -85,6 +105,8 @@ Weitere Funktionen: Tag/Nacht-Umschaltung, Minikarte, Passanten, automatisches S
 | `js/core.js` | Spielstand, Speichern, Seitenleiste, Dialogfenster |
 | `js/city.js` | Die Stadt: Karte, Gebäude, Spielfigur, Passanten, Minikarte |
 | `js/locations.js` | Orte: Beat Dealers und Vinyl Junky |
+| `js/audio.js` | Sound: Club-Musik per Web Audio, Bass durch die Wand, Ton an/aus |
+| `js/games/live-show.js` | Live-Party: animierte Club-Szene mit Crowd, Licht, Nebel und Musik |
 | `js/games/party-night.js` | Minispiel Party-Nacht: Planung, Nacht, Abrechnung, Saisonende |
 | `js/games/beat-battle.js` | Minispiel Beat-Battle: Notenmuster, Musik per Web Audio, Treffer, Bonus |
 | `js/games/door.js` | Minispiel Türsteher: Gäste, Regeln des Abends, Zeitlimit, Bonus |
@@ -143,7 +165,8 @@ Die Adresse **https://unufreee.github.io/gdu-underground-city-course/?demo** sta
 | 2.0 | Stadt als Zentrale für Minispiele. Neues Minispiel **Party-Nacht** mit Saison über 5 Nächte, Saisonziel, 4 DJs, Ausstattung, Werbung, Abend-Ereignissen, Abrechnung, Sieg- und Niederlagebedingung. Warteschlange vor dem Club wächst mit dem Ruf. Code in Module aufgeteilt, Spielbalance per Simulation geprüft. Gesichert im Branch `version-2.0`. |
 | 2.1 | Neues Minispiel **Beat-Battle** am DJ-Pult: Rhythmusspiel mit vier Spuren, live erzeugter Musik je nach DJ-Genre, Stimmungsbonus von −4 bis +10 für die Party-Nacht, ein Versuch pro Nacht, Touch-Buttons für das Handy. Spielstände aus Version 2.0 bleiben erhalten. Gesichert im Branch `version-2.1`. |
 | 2.2 | Letzte Version vor dem Feature-Stopp (30.10.): Fokus-Hinweis im iframe („Ins Spiel klicken, um zu starten“), **Demo-Modus** über `?demo` mit vorbereitetem Spielstand für die Präsentation. Spielmechanik, Grafik und Spielstände unverändert. Gesichert im Branch `version-2.2`. |
-| 2.3 | Zwei neue Minispiele: **Türsteher** (Gäste nach Regeln einlassen, −5 bis +6 Stimmung) und **Crate Digging** (passende Platten nach Genre und BPM finden, −18 bis +18 Gäste). Party-Planung und Seitenleiste zeigen alle drei Zusatzspiele. Saisonziel von 4.000 € auf 5.000 € angehoben, Balance per Simulation neu geprüft. Spielstände aus 2.2 und Demo-Modus bleiben erhalten. |
+| 2.3 | Zwei neue Minispiele: **Türsteher** (Gäste nach Regeln einlassen, −5 bis +6 Stimmung) und **Crate Digging** (passende Platten nach Genre und BPM finden, −18 bis +18 Gäste). Party-Planung und Seitenleiste zeigen alle drei Zusatzspiele. Saisonziel von 4.000 € auf 5.000 € angehoben, Balance per Simulation neu geprüft. Spielstände aus 2.2 und Demo-Modus bleiben erhalten. Gesichert im Branch `version-2.3`. |
+| 3.0 | **Live-Version:** animierte Live-Party mit tanzender Crowd, Lasern, Nebel und Club-Musik im Genre des DJs; lebendige Stadt mit pulsierenden Neonschildern, Lasern und Nebel am Bunker 99 und Regen bei Starkregen; Bass durch die Wand je nach Nähe zum Club; Ton-an/aus-Schalter; Titel und Bestenliste. Höchstens 3 Lichtblitze pro Sekunde, „Bewegung reduzieren“ wird beachtet. Spielstände aus 2.3 und Demo-Modus bleiben erhalten. |
 
 ## Entwicklung
 

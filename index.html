@@ -58,9 +58,11 @@
           E oder Enter: Gebäude betreten<br>
           Esc: Fenster schließen<br>
           Minikarte: oben rechts im Spielfeld<br>
+          Vor dem Bunker 99 hörst du den Bass durch die Wand.<br>
           Spielstand wird automatisch gespeichert.
         </div>
         <div class="buttons" style="margin-top:12px">
+          <button class="secondary" id="soundToggle" aria-pressed="true">🔊 Ton an</button>
           <button class="secondary" id="lightMode">☀ Tag / Nacht</button>
           <button class="secondary" id="reset">Neues Spiel</button>
         </div>
@@ -68,7 +70,7 @@
     </aside>
   </main>
 
-  <footer>GDU Underground City · Chapter 01 · Version 2.3</footer>
+  <footer>GDU Underground City · Chapter 01 · Version 3.0</footer>
 
   <div class="dialog-back" id="back">
     <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
@@ -82,8 +84,10 @@
   <script src="js/data.js"></script>
   <script src="js/economy.js"></script>
   <script src="js/core.js"></script>
+  <script src="js/audio.js"></script>
   <script src="js/city.js"></script>
   <script src="js/locations.js"></script>
+  <script src="js/games/live-show.js"></script>
   <script src="js/games/party-night.js"></script>
   <script src="js/games/beat-battle.js"></script>
   <script src="js/games/door.js"></script>

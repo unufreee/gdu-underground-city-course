@@ -41,7 +41,7 @@ document.getElementById('touchE').addEventListener('click', enter);
 document.getElementById('lightMode').addEventListener('click', () => { GDU.view.night = !GDU.view.night; GDU.draw(); });
 document.getElementById('reset').addEventListener('click', () => {
   if (confirm(GDU.demo ? 'Demo auf den Anfangsstand zurücksetzen?' : 'Spielstand wirklich komplett zurücksetzen?')) {
-    GDU.state = GDU.demo ? GDU.demoState() : GDU.newSeason();
+    GDU.state = GDU.demo ? GDU.demoState() : GDU.newSeason({ mute: GDU.state.mute });
     GDU.view.facing = 'down';
     GDU.view.stride = 0;
     GDU.save();
@@ -69,6 +69,38 @@ if (GDU.demo) {
   document.getElementById('reset').textContent = 'Demo zurücksetzen';
 }
 
+/* ---------- Sound ----------
+   Browser erlauben Ton erst nach einer Nutzeraktion: der erste Tastendruck oder Klick schaltet ihn frei. */
+const soundBtn = document.getElementById('soundToggle');
+const updateSoundBtn = () => { soundBtn.textContent = GDU.state.mute ? '🔇 Ton aus' : '🔊 Ton an'; soundBtn.setAttribute('aria-pressed', String(!GDU.state.mute)); };
+soundBtn.addEventListener('click', () => { GDU.audio.mute(!GDU.state.mute); updateSoundBtn(); });
+updateSoundBtn();
+const firstGesture = () => GDU.audio.unlock();
+document.addEventListener('keydown', firstGesture, { once: true });
+document.addEventListener('pointerdown', firstGesture, { once: true });
+
+// Bass durch die Wand: je näher Maria an der Tür von Bunker 99 steht, desto lauter (nur ohne offenes Fenster)
+const wallLevel = () => {
+  if (GDU.dialogOpen() || document.hidden || GDU.state.mute) return 0;
+  const d = Math.abs(GDU.state.x - 5) + Math.abs(GDU.state.y - 10);
+  return GDU.clamp(1 - d / 13, 0, 1);
+};
+
+/* ---------- Animation ----------
+   Die Stadt wird mit etwa 30 Bildern pro Sekunde neu gezeichnet (Neon, Laser, Nebel, Regen).
+   Bei „Bewegung reduzieren“, offenem Fenster oder verstecktem Tab wird nicht animiert. */
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let lastFrame = 0;
+function animate(now) {
+  if (now - lastFrame > 33) {
+    lastFrame = now;
+    GDU.audio.setWall(wallLevel());
+    if (!REDUCED_MOTION && !document.hidden && !GDU.dialogOpen()) { GDU.view.t = now / 1000; GDU.draw(true); }
+  }
+  requestAnimationFrame(animate);
+}
+
 GDU.renderMinigames();
 GDU.draw();
 setInterval(GDU.ambientStep, 950);
+requestAnimationFrame(animate);
