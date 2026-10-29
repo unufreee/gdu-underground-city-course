@@ -69,6 +69,18 @@ Startet man im Bunker 99 die Party, läuft sie als animierte Szene ab: DJ am Pul
 
 Am Saisonende gibt es einen Titel nach Kapital: Kellerkind (unter 2.500 €), Szene-Insider, Szene-Größe (Ziel erreicht), Club-Legende (ab 7.000 €), Königin der Nacht (ab 9.000 €), bei Pleite „Pleitegeier“. Die fünf besten Saisons stehen in der Bestenliste; die Bestleistung zeigt auch die Seitenleiste.
 
+### Ereigniskarten (ab Version 3.1)
+
+Nach der Abrechnung einer Nacht kommt meistens (in etwa 75 % der Fälle) eine **Durchsage** aus dem Viertel mit zwei Entscheidungen, zum Beispiel Lärmbeschwerde, Influencer an der Tür, Stromausfall, Plattenflohmarkt, Freibier bei der Konkurrenz, Fundsache an der Bar, Taxistreik, Werbespot im Nachtradio, Streetart-Crew oder Afterhour-Anfrage. Die Folgen wirken sofort (Geld, Ruf) oder in der nächsten Nacht (Gäste, Stimmung); manche Entscheidungen sind ein Risiko. Jede Karte kommt höchstens einmal pro Saison. Alle Figuren sind erfunden. Neue Karten lassen sich in `js/events.js` ergänzen.
+
+### Erfolge (ab Version 3.1)
+
+Zwölf Erfolge, zum Beispiel „Ausverkauft“, „Ekstase“ (90 % Stimmung), „Perfekte Tür“, „Goldene Kiste“, „Volles Programm“ (alle drei Zusatzspiele in einer Nacht), „Ehrliche Haut“ oder „Königin der Nacht“. Beim Freischalten erscheint ein Pop-up, die Sammlung steht in der Seitenleiste. Erfolge und Bestenliste bleiben über Saisons hinweg erhalten; nur „Neues Spiel“ setzt sie zurück.
+
+### Sprechende Passanten (ab Version 3.1)
+
+Steht Maria direkt neben einem Passanten, bleibt er stehen und sagt etwas: Sprüche aus dem Viertel und versteckte Tipps, etwa welches Genre heute gefragt ist oder ab welchem Ruf die Headlinerin bucht.
+
 ### Barrierefreiheit und Effekte
 
 Höchstens 3 Lichtblitze pro Sekunde (der Strobe in der Live-Party blitzt nur alle zwei Takte und nur bei sehr guter Stimmung). Bei der Systemeinstellung „Bewegung reduzieren“ steht die Stadt still, die Crowd tanzt nicht, Laser schwenken nicht, Regen und Nebel ziehen nicht, und es gibt keinen Strobe.
@@ -105,6 +117,8 @@ Weitere Funktionen: Tag/Nacht-Umschaltung, Minikarte, Passanten, automatisches S
 | `js/core.js` | Spielstand, Speichern, Seitenleiste, Dialogfenster |
 | `js/city.js` | Die Stadt: Karte, Gebäude, Spielfigur, Passanten, Minikarte |
 | `js/locations.js` | Orte: Beat Dealers und Vinyl Junky |
+| `js/events.js` | Ereigniskarten zwischen den Nächten |
+| `js/achievements.js` | Erfolge, Pop-ups und Sammlung in der Seitenleiste |
 | `js/audio.js` | Sound: Club-Musik per Web Audio, Bass durch die Wand, Ton an/aus |
 | `js/games/live-show.js` | Live-Party: animierte Club-Szene mit Crowd, Licht, Nebel und Musik |
 | `js/games/party-night.js` | Minispiel Party-Nacht: Planung, Nacht, Abrechnung, Saisonende |
@@ -166,7 +180,8 @@ Die Adresse **https://unufreee.github.io/gdu-underground-city-course/?demo** sta
 | 2.1 | Neues Minispiel **Beat-Battle** am DJ-Pult: Rhythmusspiel mit vier Spuren, live erzeugter Musik je nach DJ-Genre, Stimmungsbonus von −4 bis +10 für die Party-Nacht, ein Versuch pro Nacht, Touch-Buttons für das Handy. Spielstände aus Version 2.0 bleiben erhalten. Gesichert im Branch `version-2.1`. |
 | 2.2 | Letzte Version vor dem Feature-Stopp (30.10.): Fokus-Hinweis im iframe („Ins Spiel klicken, um zu starten“), **Demo-Modus** über `?demo` mit vorbereitetem Spielstand für die Präsentation. Spielmechanik, Grafik und Spielstände unverändert. Gesichert im Branch `version-2.2`. |
 | 2.3 | Zwei neue Minispiele: **Türsteher** (Gäste nach Regeln einlassen, −5 bis +6 Stimmung) und **Crate Digging** (passende Platten nach Genre und BPM finden, −18 bis +18 Gäste). Party-Planung und Seitenleiste zeigen alle drei Zusatzspiele. Saisonziel von 4.000 € auf 5.000 € angehoben, Balance per Simulation neu geprüft. Spielstände aus 2.2 und Demo-Modus bleiben erhalten. Gesichert im Branch `version-2.3`. |
-| 3.0 | **Live-Version:** animierte Live-Party mit tanzender Crowd, Lasern, Nebel und Club-Musik im Genre des DJs; lebendige Stadt mit pulsierenden Neonschildern, Lasern und Nebel am Bunker 99 und Regen bei Starkregen; Bass durch die Wand je nach Nähe zum Club; Ton-an/aus-Schalter; Titel und Bestenliste. Höchstens 3 Lichtblitze pro Sekunde, „Bewegung reduzieren“ wird beachtet. Spielstände aus 2.3 und Demo-Modus bleiben erhalten. |
+| 3.0 | **Live-Version:** animierte Live-Party mit tanzender Crowd, Lasern, Nebel und Club-Musik im Genre des DJs; lebendige Stadt mit pulsierenden Neonschildern, Lasern und Nebel am Bunker 99 und Regen bei Starkregen; Bass durch die Wand je nach Nähe zum Club; Ton-an/aus-Schalter; Titel und Bestenliste. Höchstens 3 Lichtblitze pro Sekunde, „Bewegung reduzieren“ wird beachtet. Spielstände aus 2.3 und Demo-Modus bleiben erhalten. Gesichert im Branch `version-3.0`. |
+| 3.1 | **Story-Version:** Ereigniskarten zwischen den Nächten mit Entscheidungen und Folgen, zwölf Erfolge mit Pop-ups und Sammlung, sprechende Passanten mit Tipps. Fehler behoben: Ton-Einstellung und Erfolge blieben beim Start einer neuen Saison nicht erhalten. Spielstände aus 3.0 und Demo-Modus bleiben erhalten. |
 
 ## Entwicklung
 

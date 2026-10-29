@@ -41,7 +41,8 @@ document.getElementById('touchE').addEventListener('click', enter);
 document.getElementById('lightMode').addEventListener('click', () => { GDU.view.night = !GDU.view.night; GDU.draw(); });
 document.getElementById('reset').addEventListener('click', () => {
   if (confirm(GDU.demo ? 'Demo auf den Anfangsstand zurücksetzen?' : 'Spielstand wirklich komplett zurücksetzen?')) {
-    GDU.state = GDU.demo ? GDU.demoState() : GDU.newSeason({ mute: GDU.state.mute });
+    GDU.state = GDU.demo ? GDU.demoState() : GDU.newSeason({ mute: GDU.state.mute });   // Komplett-Reset: Erfolge und Bestenliste weg, Ton-Einstellung bleibt
+    GDU.renderAchievements();
     GDU.view.facing = 'down';
     GDU.view.stride = 0;
     GDU.save();
@@ -101,6 +102,7 @@ function animate(now) {
 }
 
 GDU.renderMinigames();
+GDU.renderAchievements();
 GDU.draw();
 setInterval(GDU.ambientStep, 950);
 requestAnimationFrame(animate);

@@ -247,6 +247,50 @@ function drawMiniMap() {
   c.font = 'bold 10px system-ui'; c.fillStyle = '#9ef5e4'; c.fillText('DISTRICT MAP', 12, 10);
 }
 
+/* ---------- Sprechende Passanten ----------
+   Steht Maria direkt neben einem Passanten, sagt er etwas: Sprüche und versteckte Tipps zum Abend. */
+GDU.chatter = () => {
+  const s = GDU.state, t = GDU.trend(s.trend), lines = [
+    'Heute schon im Bunker 99 gewesen?',
+    'Bei Vinyl Junky gibt\'s neue Kisten. Aber nur, wenn du weißt, was dein DJ spielt.',
+    'Wer an der Tür Betrunkene reinlässt, hat drinnen Ärger. Weiß doch jeder.',
+    'Nova Black legt nur in Clubs mit Ruf auf. Ab 20 oder so.',
+    'Ab 13 Euro Eintritt meckern die Leute. Ist halt so.',
+    'Lichtshow plus Nebel … ich sag nur: Gänsehaut.',
+    'Die letzte Bahn fährt um 0:47. Danach gehört die Stadt uns.'
+  ];
+  if (t.genre) lines.push(t.title + '! Heute will jeder ' + t.genre + ' hören.', 'Wer heute keinen ' + t.genre + '-DJ bucht, ist selber schuld.');
+  if (t.id === 'rain') lines.push('Bei dem Regen? Nur für richtig gute Musik.');
+  if (t.id === 'rival') lines.push('Alle reden vom Hafenfestival. Wird hart heute.');
+  if (s.rep >= 15) lines.push('Die Schlange vor Bunker 99 wird immer länger …');
+  if (s.lastHappy !== null && s.lastHappy >= 80) lines.push('Letzte Nacht im Bunker war der Wahnsinn!');
+  if (s.lastHappy !== null && s.lastHappy < 45) lines.push('Letzte Nacht im Bunker? Na ja … war schon mal besser.');
+  if (!s.gear.sound) lines.push('Ein Club ohne Anlage? Frag mal bei Vinyl Junky.');
+  return lines;
+};
+
+function speechBubble(n) {
+  const p = iso(n.x, n.y), lines = GDU.chatter();
+  const text = lines.at(n.say % lines.length);
+  // Zeilenumbruch nach etwa 28 Zeichen
+  const words = text.split(' '), rows = [];
+  let row = '';
+  for (const w of words) { if ((row + ' ' + w).trim().length > 28) { rows.push(row.trim()); row = w; } else row += ' ' + w; }
+  rows.push(row.trim());
+  ctx.save();
+  ctx.font = '600 12px system-ui';
+  const wMax = Math.max(...rows.map(r => ctx.measureText(r).width)) + 20, hBox = rows.length * 16 + 12;
+  const bx = GDU.clamp(p.x - wMax / 2, 6, 1100 - wMax - 6), by = p.y - 42 - hBox;
+  ctx.fillStyle = '#06121df0'; ctx.strokeStyle = '#00e5c3'; ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(bx, by, wMax, hBox, 8); else ctx.rect(bx, by, wMax, hBox);
+  ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(p.x - 6, by + hBox); ctx.lineTo(p.x, by + hBox + 8); ctx.lineTo(p.x + 6, by + hBox); ctx.fill();
+  ctx.fillStyle = '#eaf6ff'; ctx.textAlign = 'left';
+  rows.forEach((r, i) => ctx.fillText(r, bx + 10, by + 20 + i * 16));
+  ctx.restore();
+}
+
 /* ---------- Gesamtbild ---------- */
 
 GDU.draw = (sceneOnly = false) => {   // sceneOnly: nur Bild neu zeichnen (Animation), Seitenleiste nicht
@@ -310,6 +354,13 @@ GDU.draw = (sceneOnly = false) => {   // sceneOnly: nur Bild neu zeichnen (Anima
   ];
   objects.sort((a, b) => a.depth - b.depth).forEach(o => o.fn());
 
+  // Passant direkt neben Maria? Dann Sprechblase (neuer Spruch bei jeder neuen Begegnung)
+  const buddy = GDU.npcs.find(n => Math.abs(n.x - s.x) <= 1 && Math.abs(n.y - s.y) <= 1);
+  if (buddy) {
+    if (GDU.view.talking !== buddy) { buddy.say = (buddy.say ?? Math.floor(Math.random() * 7)) + 1; GDU.view.talking = buddy; }
+    speechBubble(buddy);
+  } else GDU.view.talking = null;
+
   for (const [x, y, t] of [[16, 12, 'GDU'], [17, 15, 'FOOD'], [10, 18, 'METRO']]) {
     const p = iso(x, y);
     sign(t, p.x, p.y + 5, t === 'FOOD' ? '#ffd68b' : '#81f8e5', 11);
@@ -349,6 +400,7 @@ GDU.move = (dx, dy) => {
 GDU.ambientStep = () => {
   if (GDU.dialogOpen() || document.hidden) return;
   for (const n of GDU.npcs) {
+    if (n === GDU.view.talking) continue;   // wer gerade mit Maria redet, bleibt stehen
     const choices = [[1, 0], [-1, 0], [0, 1], [0, -1], [0, 0]];
     const [dx, dy] = choices[Math.floor(Math.random() * choices.length)];
     const nx = n.x + dx, ny = n.y + dy;

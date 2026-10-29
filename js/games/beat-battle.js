@@ -275,6 +275,7 @@ GDU.beat = (() => {
     const s = GDU.state;
     s.warmup = { night: s.night, season: s.season, bonus: rating.bonus, acc: Math.round(acc * 100) };
     GDU.save();
+    if (acc >= 0.9) GDU.achieve('warmup');
     setTimeout(stop, 600);   // Musik kurz ausklingen lassen
 
     GDU.modal('BEAT-BATTLE · ' + rating.title,

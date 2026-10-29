@@ -173,6 +173,7 @@ GDU.door = (() => {
     cleanup();
     s.door = { night: s.night, season: s.season, bonus: rating.bonus, acc: Math.round(acc * 100), trouble: r.trouble };
     GDU.save();
+    if (r.right === GUESTS) GDU.achieve('door');
     GDU.modal('TÜRSTEHER · ' + rating.title,
       '<div class="result-top"><div><small>Richtig</small><b>' + r.right + ' / ' + GUESTS + '</b></div><div><small>Ärger reingelassen</small><b>' + r.trouble + '</b></div><div><small>Stimmung heute</small><b>' + (rating.bonus > 0 ? '+' : '') + rating.bonus + '</b></div></div>' +
       '<p>' + (rating.bonus > 0 ? 'Die richtige Crowd ist drin. Das spürt man auf der Tanzfläche.' : rating.bonus < 0 ? 'Drinnen wird es unruhig. Die Stimmung leidet.' : 'Ein paar Fehler, aber nichts Dramatisches.') +

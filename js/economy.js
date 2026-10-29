@@ -28,7 +28,8 @@ GDU.simulateNight = (p, rnd = Math.random) => {
   const events = [];
 
   // Gäste
-  const base = 15 + p.rep * 2 + p.dj.fans + p.promo.guests + (p.crate || 0);   // Crate Digging: Gäste-Bonus oder -Malus
+  const mod = p.mod || { guests: 0, vibe: 0 };   // Folgen einer Ereigniskarte
+  const base = Math.max(5, 15 + p.rep * 2 + p.dj.fans + p.promo.guests + (p.crate || 0) + mod.guests);   // Crate Digging: Gäste-Bonus oder -Malus
   let guests = Math.round(base * GDU.trendFactor(p.trend, p.dj) * GDU.priceFactor(p.price) * (0.9 + rnd() * 0.2));
   if (guests > c.capacity) { guests = c.capacity; events.push('Die Schlange reicht bis zur Metro. Ausverkauft!'); }
 
@@ -38,6 +39,7 @@ GDU.simulateNight = (p, rnd = Math.random) => {
     vibe += p.warmup;
     events.push(p.warmup > 0 ? 'Marias Warm-up hat die Crowd schon angeheizt.' : 'Das Warm-up holpert. Der DJ muss die Stimmung erst retten.');
   }
+  if (mod.guests || mod.vibe) { vibe += mod.vibe; events.push('Nachwirkung von „' + mod.title + '“: ' + (mod.guests + mod.vibe >= 0 ? 'das zahlt sich heute aus.' : 'das spürt man heute.')); }
   if (p.crate) events.push(p.crate > 0 ? 'Die neuen Platten aus der Kiste ziehen zusätzliche Fans an.' : 'Ein paar Platten passen nicht ins Set. Manche Fans bleiben weg.');
   if (p.door) {   // Bonus oder Malus aus dem Türsteher-Spiel
     vibe += p.door;

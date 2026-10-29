@@ -101,6 +101,7 @@ GDU.crate = (() => {
     const guests = r.hits * PER_HIT - r.misses * PER_MISS;
     s.crate = { night: s.night, season: s.season, guests, hits: r.hits, misses: r.misses };
     GDU.save();
+    if (r.hits >= PICKS && !r.misses) GDU.achieve('crate');
     const title = r.hits >= 5 && !r.misses ? 'Goldene Kiste!' : guests > 0 ? 'Gute Funde' : guests < 0 ? 'Fehlgriffe' : 'Nichts Besonderes';
     GDU.modal('CRATE DIGGING · ' + title,
       '<div class="result-top"><div><small>Treffer</small><b>' + r.hits + '</b></div><div><small>Fehlgriffe</small><b>' + r.misses + '</b></div><div><small>Gäste heute</small><b>' + (guests > 0 ? '+' : '') + guests + '</b></div></div>' +

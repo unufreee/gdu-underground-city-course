@@ -55,8 +55,11 @@ function planner() {
     line(!!warm, warm ? 'Warm-up: ' + (warm.aborted ? 'abgebrochen' : warm.acc + ' % getroffen') + ', <b>' + sg(warm.bonus) + ' Stimmung</b>' : 'Warm-up am DJ-Pult (Beat-Battle): bis zu +10 Stimmung') +
     line(!!door, door ? 'Türsteher: ' + (door.aborted ? 'abgebrochen' : door.acc + ' % richtig') + ', <b>' + sg(door.bonus) + ' Stimmung</b>' : 'Türsteher: die richtige Crowd reinlassen, bis zu +6 Stimmung') +
     '</ul></div>';
+  const mod = GDU.tonight('mod');
+  const modHtml = mod && (mod.guests || mod.vibe) ? '<p class="note">Nachwirkung „' + mod.title + '“: ' +
+    [mod.guests ? sg(mod.guests) + ' Gäste' : '', mod.vibe ? sg(mod.vibe) + ' Stimmung' : ''].filter(Boolean).join(', ') + '</p>' : '';
 
-  GDU.modal('BUNKER 99 · Party-Nacht', html + extras, [
+  GDU.modal('BUNKER 99 · Party-Nacht', html + modHtml + extras, [
     ['PARTY STARTEN', startNight],
     [warm ? 'Warm-up gespielt' : '🎧 Warm-up', () => GDU.beat.open(), !!warm, 'secondary'],
     [door ? 'Tür erledigt' : '🚪 Türsteher', () => GDU.door.open(), !!door, 'secondary'],
@@ -85,10 +88,10 @@ function startNight() {
   // Ergebnis sofort berechnen und speichern (die Animation ist nur Show)
   const nightNo = s.night;
   s.money -= promo.price;
-  const warm = GDU.tonight('warmup'), door = GDU.tonight('door'), crate = GDU.tonight('crate');
+  const warm = GDU.tonight('warmup'), door = GDU.tonight('door'), crate = GDU.tonight('crate'), mod = GDU.tonight('mod');
   const r = GDU.simulateNight({ rep: s.rep, gear: s.gear, dj, price, promo, trend,
-    warmup: warm ? warm.bonus : 0, door: door ? door.bonus : 0, crate: crate ? crate.guests : 0 });
-  s.warmup = null; s.door = null; s.crate = null;
+    warmup: warm ? warm.bonus : 0, door: door ? door.bonus : 0, crate: crate ? crate.guests : 0, mod });
+  s.warmup = null; s.door = null; s.crate = null; s.mod = null;
   s.money += r.net;
   s.rep = Math.max(0, s.rep + r.rep);
   s.lastHappy = r.happy;
@@ -110,6 +113,7 @@ function startNight() {
     s.trend = GDU.rollTrend(s.trend);
   }
   GDU.save();
+  GDU.checkNight(r, dj, { warm, door, crate });
 
   const report = { r, dj, promo, price, finished, broke };
   const lines = [
@@ -146,7 +150,8 @@ function settlement({ r, dj, promo, price, finished, broke }) {
     '<p>Kapital jetzt: <b>' + GDU.euro(s.money) + '</b> · Ruf: <b>' + s.rep + '</b></p>' +
     (finished || broke ? '' : '<p class="note"><b>Nächste Nacht: ' + GDU.trend(s.trend).title + '.</b> ' + GDU.trend(s.trend).text + '</p>');
 
-  const next = broke || finished ? seasonResult : GDU.close;
+  // Nach der Abrechnung: eventuell eine Ereigniskarte, dann zurück in die Stadt
+  const next = broke || finished ? seasonResult : () => GDU.events.maybe(GDU.close);
   GDU.modal(r.net >= 0 ? 'ABRECHNUNG · Starke Nacht' : 'ABRECHNUNG · Verlust', html,
     [[broke || finished ? 'Saison auswerten' : 'Weiter', next]]);
 }
@@ -189,7 +194,7 @@ function seasonResult() {
     (rows ? '<table class="bill history">' + rows + '</table>' : '') +
     (hall ? '<h3 class="small-h">Bestenliste</h3><table class="bill history">' + hall + '</table>' : ''),
     [['Neue Saison starten', () => {
-      GDU.state = GDU.newSeason({ x: s.x, y: s.y, season: s.season, best: s.best, hall: s.hall, mute: s.mute });
+      GDU.state = GDU.newSeason({ x: s.x, y: s.y, season: s.season, best: s.best, hall: s.hall, mute: s.mute, achievements: s.achievements });
       GDU.save();
       GDU.close();
     }], ['Schließen', GDU.close, false, 'secondary']], true);

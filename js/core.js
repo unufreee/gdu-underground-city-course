@@ -28,6 +28,9 @@ GDU.newSeason = (keep = {}) => ({
   best: keep.best ?? 0,
   hall: keep.hall ?? [],       // Bestenliste der besten Saisons (max. 5)
   mute: keep.mute ?? false,    // Ton aus
+  achievements: keep.achievements ?? [],   // freigeschaltete Erfolge (bleiben über Saisons)
+  mod: null,                   // Folgen einer Ereigniskarte für die nächste Nacht
+  seenEvents: [],              // in dieser Saison schon gezogene Ereigniskarten
   money: GDU.config.startMoney,
   rep: 0,
   night: 1,
@@ -44,7 +47,6 @@ GDU.newSeason = (keep = {}) => ({
   warmup: null,          // Ergebnis des Beat-Battles für die aktuelle Nacht
   door: null,            // Ergebnis des Türsteher-Spiels für die aktuelle Nacht
   crate: null,           // Ergebnis von Crate Digging für die aktuelle Nacht
-  mute: false            // Ton im Beat-Battle aus
 });
 
 GDU.load = () => {
@@ -96,6 +98,7 @@ GDU.recordSeason = () => {
   s.hall.push({ season: s.season, money: s.money, result: s.result, title: GDU.seasonTitle(s.money, s.result) });
   s.hall.sort((a, b) => b.money - a.money);
   s.hall = s.hall.slice(0, 5);
+  if (GDU.checkSeason) GDU.checkSeason(s);
 };
 const signed = n => (n > 0 ? '+' : '') + n;
 
