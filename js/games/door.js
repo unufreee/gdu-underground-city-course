@@ -87,7 +87,7 @@ GDU.door = (() => {
       '<p>Heute stehst du selbst an der Tür. ' + GUESTS + ' Gäste, je ' + TIME + ' Sekunden Zeit. Eine gute Tür macht die Party besser. Lässt du die Falschen rein, gibt es Ärger.</p>' +
       '<h3 class="small-h">Regeln für Nacht ' + s.night + '</h3>' + rulesHtml(dress) +
       '<p class="small muted">Tastatur: <b>D</b> oder → = Rein, <b>A</b> oder ← = Draußen. Ein Versuch pro Nacht.</p>',
-      [['Tür öffnen', start], ['Zurück', () => GDU.places.club(), false, 'secondary']], true);
+      [['Tür öffnen', start], ['Zurück', () => GDU.reopenParty(), false, 'secondary']], true);
   }
 
   function start() {
@@ -178,7 +178,7 @@ GDU.door = (() => {
       '<div class="result-top"><div><small>Richtig</small><b>' + r.right + ' / ' + GUESTS + '</b></div><div><small>Ärger reingelassen</small><b>' + r.trouble + '</b></div><div><small>Stimmung heute</small><b>' + (rating.bonus > 0 ? '+' : '') + rating.bonus + '</b></div></div>' +
       '<p>' + (rating.bonus > 0 ? 'Die richtige Crowd ist drin. Das spürt man auf der Tanzfläche.' : rating.bonus < 0 ? 'Drinnen wird es unruhig. Die Stimmung leidet.' : 'Ein paar Fehler, aber nichts Dramatisches.') +
       (r.wrongOut ? ' ' + r.wrongOut + ' Gäste wurden zu Unrecht abgewiesen oder haben zu lange gewartet.' : '') + '</p>',
-      [['Zur Party-Planung', () => GDU.places.club()]], true);
+      [['Zur Party-Planung', () => GDU.reopenParty()]], true);
   }
 
   return { open, debug: () => run };

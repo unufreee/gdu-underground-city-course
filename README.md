@@ -12,7 +12,7 @@ Du steuerst Maria durch den Warehouse District. Die Stadt ist die **Zentrale**: 
 
 ### Minispiel „Party-Nacht“ (spielbar)
 
-Eine Saison hat **5 Nächte**. Ziel: **5.000 € Kapital nach der letzten Nacht**. Startkapital: 300 €.
+Eine Saison hat **5 Nächte**. Ziel: **5.000 € Kapital nach der letzten Nacht** (ab Chapter 02: **10.000 €**). Startkapital: 300 €.
 
 1. **Vinyl Junky** (Plattenladen): Soundanlage kaufen (Pflicht), später Nebelmaschine, Lichtshow und Bar-Upgrade für mehr Stimmung und Umsatz.
 2. **Beat Dealers** (DJ-Agentur): Für jede Nacht einen DJ buchen. Jeder DJ hat Genre, Gage, Fans und Einfluss auf die Stimmung. Die Headlinerin Nova Black bucht nur, wer genug Ruf hat.
@@ -67,7 +67,33 @@ Startet man im Bunker 99 die Party, läuft sie als animierte Szene ab: DJ am Pul
 
 ### Titel und Bestenliste (ab Version 3.0)
 
-Am Saisonende gibt es einen Titel nach Kapital: Kellerkind (unter 2.500 €), Szene-Insider, Szene-Größe (Ziel erreicht), Club-Legende (ab 7.000 €), Königin der Nacht (ab 9.000 €), bei Pleite „Pleitegeier“. Die fünf besten Saisons stehen in der Bestenliste; die Bestleistung zeigt auch die Seitenleiste.
+Am Saisonende gibt es einen Titel nach Kapital, gemessen am Saisonziel: Kellerkind (unter der Hälfte), Szene-Insider, Szene-Größe (Ziel erreicht), Club-Legende (2.000 € darüber), Königin der Nacht (4.000 € darüber), bei Pleite „Pleitegeier“. Die fünf besten Saisons stehen in der Bestenliste; die Bestleistung zeigt auch die Seitenleiste.
+
+### Club-Ausbau (ab Version 4.0)
+
+In der Party-Planung im Bunker 99 über „🏗 Ausbau“. Drei Stufen, die bis zum Saisonende bleiben und den Bunker auf der Karte sichtbar wachsen lassen:
+
+| Stufe | Preis | Wirkung |
+|---|---|---|
+| Zweiter Floor | 500 € | +60 Gäste Kapazität, +2 Stimmung |
+| Dachterrasse | 1.000 € | +60 Gäste, +4 Stimmung, Lichterketten auf dem Dach |
+| VIP-Lounge | 1.800 € | +40 Gäste, +2 Stimmung, +2 € Getränkeumsatz pro Gast, +1 Ruf pro Nacht |
+
+Jede Stufe kostet zusätzlich 40 € Betriebskosten pro Nacht.
+
+### Chapter 02: Der Hafen (ab Version 4.0)
+
+Wer eine Saison gewinnt, schaltet dauerhaft den zweiten Bezirk frei. Die **Metro U9** (Station im Warehouse District unten auf der Plaza) fährt dann zum Hafen und zurück. Am Hafen: Wasser, Holzsteg, Container, Kräne und drei neue Orte:
+
+- **Radio Hafenfunk:** einmal pro Nacht Werbespot (150 €, +40 Gäste zusätzlich zur normalen Werbung) und Live-Interview (kostenlos, +2 Ruf).
+- **Kran-Lounge:** Headliner-Booking mit drei neuen DJs: Kid Kranich (Drum & Bass, ab Ruf 8), Mila Tiefgang (House, ab Ruf 10), Rostrot (Techno, ab Ruf 16).
+- **Pier 7 Open Air:** einmal pro Saison eine Open-Air-Nacht statt Bunker 99: bis 360 Gäste, 650 € Betriebskosten, bei klarem Himmel mehr Gäste und Stimmung, bei Starkregen ein Desaster. Die Live-Party zeigt dann Sternenhimmel, Kräne und Wasser.
+
+Ab Chapter 02 liegt das Saisonziel bei 10.000 €. Die Titel richten sich nach dem jeweiligen Ziel.
+
+### DJ-Persönlichkeiten (ab Version 4.0)
+
+Jeder DJ hat einen eigenen Spruch, der in der Live-Party eingeblendet wird, z. B. DJ Voltage „Strom an. Kopf aus.“ oder Rostrot „Metall. Nebel. Vier Viertel. Mehr braucht keiner.“
 
 ### Ereigniskarten (ab Version 3.1)
 
@@ -75,7 +101,7 @@ Nach der Abrechnung einer Nacht kommt meistens (in etwa 75 % der Fälle) eine **
 
 ### Erfolge (ab Version 3.1)
 
-Zwölf Erfolge, zum Beispiel „Ausverkauft“, „Ekstase“ (90 % Stimmung), „Perfekte Tür“, „Goldene Kiste“, „Volles Programm“ (alle drei Zusatzspiele in einer Nacht), „Ehrliche Haut“ oder „Königin der Nacht“. Beim Freischalten erscheint ein Pop-up, die Sammlung steht in der Seitenleiste. Erfolge und Bestenliste bleiben über Saisons hinweg erhalten; nur „Neues Spiel“ setzt sie zurück.
+Fünfzehn Erfolge (ab 4.0 auch „Nächster Halt: Hafen“, „VIP-Lounge“ und „Pier 7 bebt“), zum Beispiel „Ausverkauft“, „Ekstase“ (90 % Stimmung), „Perfekte Tür“, „Goldene Kiste“, „Volles Programm“ (alle drei Zusatzspiele in einer Nacht), „Ehrliche Haut“ oder „Königin der Nacht“. Beim Freischalten erscheint ein Pop-up, die Sammlung steht in der Seitenleiste. Erfolge und Bestenliste bleiben über Saisons hinweg erhalten; nur „Neues Spiel“ setzt sie zurück.
 
 ### Sprechende Passanten (ab Version 3.1)
 
@@ -117,6 +143,7 @@ Weitere Funktionen: Tag/Nacht-Umschaltung, Minikarte, Passanten, automatisches S
 | `js/core.js` | Spielstand, Speichern, Seitenleiste, Dialogfenster |
 | `js/city.js` | Die Stadt: Karte, Gebäude, Spielfigur, Passanten, Minikarte |
 | `js/locations.js` | Orte: Beat Dealers und Vinyl Junky |
+| `js/city.js` (Bezirke) | `GDU.DISTRICTS` beschreibt Warehouse District und Hafen: Gebäude, Wege, Wasser, Deko, Passanten |
 | `js/events.js` | Ereigniskarten zwischen den Nächten |
 | `js/achievements.js` | Erfolge, Pop-ups und Sammlung in der Seitenleiste |
 | `js/audio.js` | Sound: Club-Musik per Web Audio, Bass durch die Wand, Ton an/aus |
@@ -135,14 +162,11 @@ Weitere Funktionen: Tag/Nacht-Umschaltung, Minikarte, Passanten, automatisches S
 
 ### Spielbalance
 
-Die Zahlen in `js/data.js` wurden mit einer Simulation von je 4.000 Saisons geprüft. Mit Version 2.3 stieg das Saisonziel von 4.000 € auf 5.000 €, weil die neuen Minispiele zusätzliche Gäste und Stimmung bringen. So zählen die Minispiele spürbar:
+Die Zahlen in `js/data.js` wurden per Simulation (je 3.000–4.000 Saisons) geprüft.
 
-| Spielweise | ohne Minispiele | mit mittleren Minispiel-Ergebnissen | mit guten Minispiel-Ergebnissen |
-|---|---|---|---|
-| Durchdacht (DJ passend zum Abend, Werbung, Technik) | ca. 99 % | ca. 100 % | ca. 100 % |
-| Solide (immer DJ Voltage, 12 € Eintritt, Flyer) | ca. 8 % | ca. 55 % | ca. 87 % |
-| Zufällige Entscheidungen | ca. 0 % | ca. 4 % | ca. 13 % |
-| Billigster DJ ohne Werbung / Abzocke mit 25 € Eintritt | 0 % | 0 % | 0 % |
+**Chapter 01 (Ziel 5.000 €):** Durchdacht mit Minispielen und Ausbau ca. 98 %, solide mit mittleren Minispiel-Ergebnissen ca. 40–55 %, nebenbei gespielt ca. 3–8 %.
+
+**Chapter 02 (Ziel 10.000 €):** Profi (beste DJs nach Abend, Ausbau bis VIP, Radio, Open Air bei klarem Himmel, gute Minispiele) ca. 90 %, gut gespielt ca. 60 %, solide ohne Hafen-Möglichkeiten unter 5 %. Chapter 02 ist also die Herausforderung für Fortgeschrittene.
 
 ## Einbindung in WordPress
 
@@ -161,7 +185,7 @@ Hinweis: Für die Tastatursteuerung muss einmal ins Spielfeld geklickt werden, d
 
 ## Demo-Modus für Präsentationen
 
-Die Adresse **https://unufreee.github.io/gdu-underground-city-course/?demo** startet mit einem vorbereiteten Spielstand: Saison 1, Nacht 3 von 5, 1.250 € Kapital, Ruf 12, Soundanlage und Nebelmaschine gekauft, Ereignis „Techno-Hype“, Maria steht vor Beat Dealers. So lassen sich DJ-Buchung, Beat-Battle, Party-Nacht und Abrechnung in wenigen Minuten zeigen.
+Die Adresse **https://unufreee.github.io/gdu-underground-city-course/?demo** startet mit einem vorbereiteten Spielstand: Saison 1, Nacht 3 von 5, 1.250 € Kapital, Ruf 12, Soundanlage und Nebelmaschine gekauft, Ereignis „Techno-Hype“, Maria steht vor Beat Dealers. Der Hafen (Chapter 02) ist in der Demo bereits offen. So lassen sich DJ-Buchung, Beat-Battle, Party-Nacht und Abrechnung in wenigen Minuten zeigen.
 
 - Oben neben dem Kapitel erscheint ein pinkes **DEMO**-Abzeichen.
 - Der Demo-Spielstand wird getrennt gespeichert. Der normale Spielstand bleibt unberührt.
@@ -181,7 +205,8 @@ Die Adresse **https://unufreee.github.io/gdu-underground-city-course/?demo** sta
 | 2.2 | Letzte Version vor dem Feature-Stopp (30.10.): Fokus-Hinweis im iframe („Ins Spiel klicken, um zu starten“), **Demo-Modus** über `?demo` mit vorbereitetem Spielstand für die Präsentation. Spielmechanik, Grafik und Spielstände unverändert. Gesichert im Branch `version-2.2`. |
 | 2.3 | Zwei neue Minispiele: **Türsteher** (Gäste nach Regeln einlassen, −5 bis +6 Stimmung) und **Crate Digging** (passende Platten nach Genre und BPM finden, −18 bis +18 Gäste). Party-Planung und Seitenleiste zeigen alle drei Zusatzspiele. Saisonziel von 4.000 € auf 5.000 € angehoben, Balance per Simulation neu geprüft. Spielstände aus 2.2 und Demo-Modus bleiben erhalten. Gesichert im Branch `version-2.3`. |
 | 3.0 | **Live-Version:** animierte Live-Party mit tanzender Crowd, Lasern, Nebel und Club-Musik im Genre des DJs; lebendige Stadt mit pulsierenden Neonschildern, Lasern und Nebel am Bunker 99 und Regen bei Starkregen; Bass durch die Wand je nach Nähe zum Club; Ton-an/aus-Schalter; Titel und Bestenliste. Höchstens 3 Lichtblitze pro Sekunde, „Bewegung reduzieren“ wird beachtet. Spielstände aus 2.3 und Demo-Modus bleiben erhalten. Gesichert im Branch `version-3.0`. |
-| 3.1 | **Story-Version:** Ereigniskarten zwischen den Nächten mit Entscheidungen und Folgen, zwölf Erfolge mit Pop-ups und Sammlung, sprechende Passanten mit Tipps. Fehler behoben: Ton-Einstellung und Erfolge blieben beim Start einer neuen Saison nicht erhalten. Spielstände aus 3.0 und Demo-Modus bleiben erhalten. |
+| 3.1 | **Story-Version:** Ereigniskarten zwischen den Nächten mit Entscheidungen und Folgen, zwölf Erfolge mit Pop-ups und Sammlung, sprechende Passanten mit Tipps. Fehler behoben: Ton-Einstellung und Erfolge blieben beim Start einer neuen Saison nicht erhalten. Spielstände aus 3.0 und Demo-Modus bleiben erhalten. Gesichert im Branch `version-3.0`. |
+| 4.0 | **Chapter 02:** zweiter Bezirk „Hafen“ (freigeschaltet nach dem ersten Saisonsieg, Metro U9), Radio Hafenfunk, Kran-Lounge mit drei neuen DJs, Pier 7 Open Air mit eigener Live-Szene; Club-Ausbau in drei Stufen, sichtbar auf der Karte; Sprüche für alle DJs; drei neue Erfolge; Saisonziel 10.000 € ab Chapter 02, Titel relativ zum Ziel; Demo-Modus mit offenem Hafen. Spielstände aus 3.1 bleiben erhalten. Gesichert vorher im Branch `version-3.1`. |
 
 ## Entwicklung
 

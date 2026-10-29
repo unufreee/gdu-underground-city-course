@@ -119,7 +119,7 @@ GDU.beat = (() => {
       '<ul class="howto"><li><b>Tastatur:</b> D F J K oder die Pfeiltasten</li><li><b>Handy:</b> die vier Spur-Buttons antippen</li><li><b>Tempo:</b> ' + bpm + ' BPM (' + genre + '), etwa 15 Sekunden</li><li>Du hast <b>einen Versuch</b> pro Nacht.</li></ul>',
       [['Los geht\'s', () => start(genre, bpm)],
        [s.mute ? '🔇 Ton aus' : '🔊 Ton an', () => { s.mute = !s.mute; GDU.save(); open(); }, false, 'secondary'],
-       ['Zurück', () => GDU.places.club(), false, 'secondary']], true);
+       ['Zurück', () => GDU.reopenParty(), false, 'secondary']], true);
   }
 
   function start(genre, bpm) {
@@ -282,7 +282,7 @@ GDU.beat = (() => {
       '<div class="result-top"><div><small>Trefferquote</small><b>' + Math.round(acc * 100) + ' %</b></div><div><small>Beste Combo</small><b>' + r.maxCombo + '</b></div><div><small>Stimmung heute</small><b>' + (rating.bonus > 0 ? '+' : '') + rating.bonus + '</b></div></div>' +
       '<table class="bill"><tr><td>Perfect</td><td>' + r.perfect + '</td></tr><tr><td>Good</td><td>' + r.good + '</td></tr><tr><td>Miss</td><td>' + r.miss + '</td></tr></table>' +
       '<p>' + (rating.bonus > 0 ? 'Die Crowd ist aufgewärmt. Der Bonus gilt für die Party in Nacht ' + s.night + '.' : rating.bonus < 0 ? 'Das Warm-up hat gewackelt. Die Party startet mit etwas schlechterer Stimmung.' : 'Kein Bonus, aber auch kein Schaden.') + '</p>',
-      [['Zur Party-Planung', () => GDU.places.club()]], true);
+      [['Zur Party-Planung', () => GDU.reopenParty()]], true);
   }
 
   // debug: nur für automatische Tests (liefert die laufende Runde)

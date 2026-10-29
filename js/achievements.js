@@ -7,7 +7,7 @@ window.GDU = window.GDU || {};
 
 GDU.ACHIEVEMENTS = [
   { id: 'first',     icon: '🎉', name: 'Erste Nacht',         text: 'Die erste Party im Bunker 99 veranstaltet.' },
-  { id: 'soldout',   icon: '🔥', name: 'Ausverkauft',         text: 'Eine Nacht mit vollem Haus (160 Gäste).' },
+  { id: 'soldout',   icon: '🔥', name: 'Ausverkauft',         text: 'Eine Nacht mit vollem Haus.' },
   { id: 'euphoria',  icon: '💖', name: 'Ekstase',             text: 'Eine Nacht mit mindestens 90 % Stimmung.' },
   { id: 'bignight',  icon: '💸', name: 'Kasse klingelt',      text: 'Mindestens 2.000 € Gewinn in einer Nacht.' },
   { id: 'warmup',    icon: '🎧', name: 'Legendäres Warm-up',  text: 'Beat-Battle mit mindestens 90 % Treffern.' },
@@ -17,7 +17,10 @@ GDU.ACHIEVEMENTS = [
   { id: 'headliner', icon: '👑', name: 'Headlinerin gebucht', text: 'Nova Black für eine Nacht gebucht.' },
   { id: 'honest',    icon: '🤝', name: 'Ehrliche Haut',       text: 'Das gefundene Portemonnaie zurückgegeben.' },
   { id: 'season',    icon: '🏆', name: 'Saison geschafft',    text: 'Das Saisonziel erreicht.' },
-  { id: 'queen',     icon: '🌙', name: 'Königin der Nacht',   text: 'Eine Saison mit mindestens 9.000 € abgeschlossen.' }
+  { id: 'queen',     icon: '🌙', name: 'Königin der Nacht',   text: 'Den Titel „Königin der Nacht“ geholt (4.000 € über dem Saisonziel).' },
+  { id: 'harbor',    icon: '🚇', name: 'Nächster Halt: Hafen', text: 'Mit der Metro U9 zum ersten Mal an den Hafen gefahren.' },
+  { id: 'vip',       icon: '🥂', name: 'VIP-Lounge',          text: 'Bunker 99 bis zur VIP-Lounge ausgebaut.' },
+  { id: 'openair',   icon: '🌊', name: 'Pier 7 bebt',         text: 'Eine Open-Air-Nacht am Pier 7 mit mindestens 300 Gästen.' }
 ];
 
 let toastTimer = null;
@@ -42,17 +45,18 @@ GDU.achieve = id => {
 // Nach einer Party-Nacht prüfen
 GDU.checkNight = (r, dj, extras) => {
   GDU.achieve('first');
-  if (r.guests >= GDU.config.capacity) GDU.achieve('soldout');
+  if (r.guests >= (r.capacity || GDU.config.capacity)) GDU.achieve('soldout');
   if (r.happy >= 90) GDU.achieve('euphoria');
   if (r.net >= 2000) GDU.achieve('bignight');
   if (dj.id === 'nova') GDU.achieve('headliner');
   if (extras.warm && extras.door && extras.crate) GDU.achieve('allin');
+  if (extras.pier && r.guests >= 300) GDU.achieve('openair');
 };
 
 // Am Saisonende prüfen
 GDU.checkSeason = s => {
   if (s.result === 'won') GDU.achieve('season');
-  if (s.result !== 'broke' && s.money >= 9000) GDU.achieve('queen');
+  if (GDU.seasonTitle(s.money, s.result) === 'Königin der Nacht') GDU.achieve('queen');
 };
 
 GDU.renderAchievements = () => {

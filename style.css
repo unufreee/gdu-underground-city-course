@@ -353,3 +353,10 @@ footer { text-align: center; color: #8298aa; font-size: 12px; padding: 12px; }
 @keyframes toast-in { from { transform: translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (max-width: 570px) { .choices { grid-template-columns: 1fr; } .toast { left: 12px; right: 12px; } }
 @media (prefers-reduced-motion: reduce) { .toast.show { animation: none; } }
+
+/* ===== Version 4.0: Chapter 02 ===== */
+
+.achievements { grid-template-columns: repeat(5, 1fr); }
+.unlock { display: block; margin: 12px 0; padding: 12px 14px; border-radius: 12px; background: linear-gradient(135deg, #0f3d78, #2a1450); border: 1px solid #5fb0ff; }
+.unlock b { display: block; color: #9cc8ff; letter-spacing: .5px; margin-bottom: 4px; }
+.unlock span { font-size: 14px; }

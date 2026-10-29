@@ -24,6 +24,11 @@ GDU.rollTrend = last => {
 // Neue Saison: Wirtschaft zurücksetzen, Position und Bestwert behalten
 GDU.newSeason = (keep = {}) => ({
   x: keep.x ?? 10, y: keep.y ?? 12,
+  district: keep.district ?? 'warehouse',   // aktueller Bezirk: 'warehouse' oder 'harbor'
+  harbor: keep.harbor ?? false,             // Chapter 02 (Hafen) freigeschaltet? Bleibt über Saisons
+  club: 0,                     // Ausbaustufe Bunker 99 in dieser Saison (0–3)
+  pierUsed: 0,                 // Saison, in der die Open-Air-Nacht am Pier 7 schon stattfand
+  radio: null,                 // Radio Hafenfunk heute Nacht (Spot / Interview)
   season: (keep.season ?? 0) + 1,
   best: keep.best ?? 0,
   hall: keep.hall ?? [],       // Bestenliste der besten Saisons (max. 5)
@@ -65,6 +70,7 @@ GDU.save = () => {
 GDU.demoState = () => ({
   ...GDU.newSeason(),
   x: 5, y: 8, money: 1250, rep: 12, night: 3, trend: 'techno', lastHappy: 66, parties: 2,
+  harbor: true,   // in der Demo ist der Hafen schon offen, damit alles gezeigt werden kann
   gear: { sound: true, fog: true }, entry: 12, promo: 'flyer',
   history: [
     { night: 1, dj: 'DJ Voltage', trend: 'Normaler Freitag', guests: 58, happy: 61, net: 702 },
@@ -83,13 +89,19 @@ GDU.tonight = field => {
 };
 GDU.warmupTonight = () => GDU.tonight('warmup');
 
+// Saisonziel: ab Chapter 02 höher
+GDU.goal = () => GDU.state.harbor ? GDU.config.goal2 : GDU.config.goal;
+
 // Titel nach Saisonergebnis
-GDU.seasonTitle = (money, result) =>
-  result === 'broke' ? 'Pleitegeier' :
-  money >= 9000 ? 'Königin der Nacht' :
-  money >= 7000 ? 'Club-Legende' :
-  money >= GDU.config.goal ? 'Szene-Größe' :
-  money >= 2500 ? 'Szene-Insider' : 'Kellerkind';
+// (relativ zum Saisonziel: Chapter 01 = 5.000 €, Chapter 02 = 10.000 €)
+GDU.seasonTitle = (money, result) => {
+  const g = GDU.goal();
+  return result === 'broke' ? 'Pleitegeier' :
+    money >= g + 4000 ? 'Königin der Nacht' :
+    money >= g + 2000 ? 'Club-Legende' :
+    money >= g ? 'Szene-Größe' :
+    money >= g / 2 ? 'Szene-Insider' : 'Kellerkind';
+};
 
 // Abgeschlossene Saison in die Bestenliste (Top 5 nach Kapital) eintragen
 GDU.recordSeason = () => {
@@ -112,13 +124,14 @@ GDU.updateHUD = () => {
   $('happy').textContent = s.lastHappy === null ? '–' : s.lastHappy + ' %';
   $('night').textContent = s.over ? 'Ende' : s.night + ' / ' + c.nights;
 
-  const pct = GDU.clamp(Math.round(s.money / c.goal * 100), 0, 100);
+  const goal = GDU.goal();
+  const pct = GDU.clamp(Math.round(s.money / goal * 100), 0, 100);
   const trend = GDU.trend(s.trend);
   const dj = s.booked ? GDU.dj(s.booked) : null;
   const step = (ok, text) => '<div class="' + (ok ? 'done' : 'muted') + '">' + (ok ? '✓' : '○') + ' ' + text + '</div>';
 
   let html =
-    '<div class="goal"><span>Ziel: ' + GDU.euro(c.goal) + ' nach Nacht ' + c.nights + '</span><strong>' + pct + ' %</strong></div>' +
+    '<div class="goal"><span>Ziel: ' + GDU.euro(goal) + ' nach Nacht ' + c.nights + (s.harbor ? ' · Chapter 02' : '') + '</span><strong>' + pct + ' %</strong></div>' +
     '<div class="bar" role="progressbar" aria-label="Fortschritt zum Saisonziel" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><i style="width:' + pct + '%"></i></div>';
 
   if (s.over) {
@@ -133,18 +146,22 @@ GDU.updateHUD = () => {
       step(!!GDU.tonight('crate'), 'Optional: Crate Digging' + (GDU.tonight('crate') ? ' (' + signed(GDU.tonight('crate').guests) + ' Gäste)' : '')) +
       step(!!GDU.tonight('warmup'), 'Optional: Warm-up am DJ-Pult' + (GDU.tonight('warmup') ? ' (' + signed(GDU.tonight('warmup').bonus) + ' Stimmung)' : '')) +
       step(!!GDU.tonight('door'), 'Optional: Türsteher' + (GDU.tonight('door') ? ' (' + signed(GDU.tonight('door').bonus) + ' Stimmung)' : '')) +
-      step(false, 'Party im Bunker 99 starten');
+      (s.harbor ? step(!!(GDU.tonight('radio') || {}).spot, 'Optional: Spot bei Radio Hafenfunk') : '') +
+      step(false, 'Party im Bunker 99' + (s.harbor && s.pierUsed !== s.season ? ' oder Open Air am Pier 7' : '') + ' starten');
   }
   if (s.hall && s.hall.length) html += '<p class="muted small">Bestleistung: ' + GDU.euro(s.hall[0].money) + ' · ' + s.hall[0].title + '</p>';
   else if (s.best) html += '<p class="muted small">Bester Saisonabschluss: ' + GDU.euro(s.best) + '</p>';
   $('season').innerHTML = html;
+  GDU.renderMinigames();
   $('seasonTitle').textContent = 'Saison ' + s.season;
+  $('chapterLabel').textContent = s.district === 'harbor' ? 'CHAPTER 02 / HAFEN' : 'CHAPTER 01 / WAREHOUSE DISTRICT';
 };
 
 GDU.renderMinigames = () => {
-  document.getElementById('minigames').innerHTML = GDU.minigames.map(m =>
-    '<div class="game ' + (m.ready ? 'ready' : 'soon') + '"><b>' + m.name + '</b><span>' + m.place + '</span><em>' + (m.ready ? 'spielbar' : 'demnächst') + '</em></div>'
-  ).join('');
+  document.getElementById('minigames').innerHTML = GDU.minigames.map(m => {
+    const locked = m.chapter === 2 && !GDU.state.harbor;
+    return '<div class="game ' + (m.ready && !locked ? 'ready' : 'soon') + '"><b>' + m.name + '</b><span>' + m.place + '</span><em>' + (locked ? 'Chapter 02' : m.ready ? 'spielbar' : 'demnächst') + '</em></div>';
+  }).join('');
 };
 
 /* ---------- Dialogfenster ---------- */

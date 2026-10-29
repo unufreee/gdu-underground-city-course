@@ -20,14 +20,14 @@ GDU.liveShow = (() => {
    */
   function play(o) {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    GDU.modal('Nacht ' + o.nightNo + ' · Live aus dem Bunker 99',
-      '<div class="show-stage"><canvas id="showCanvas" width="' + W + '" height="' + H + '" role="img" aria-label="Animierte Party im Bunker 99 mit ' + o.r.guests + ' Gästen"></canvas>' +
+    GDU.modal('Nacht ' + o.nightNo + ' · Live ' + (o.venue === 'pier' ? 'vom Pier 7' : 'aus dem Bunker 99'),
+      '<div class="show-stage"><canvas id="showCanvas" width="' + W + '" height="' + H + '" role="img" aria-label="Animierte Party ' + (o.venue === 'pier' ? 'am Pier 7' : 'im Bunker 99') + ' mit ' + o.r.guests + ' Gästen"></canvas>' +
       '<div class="show-ticker" id="showTicker"></div></div>' +
       '<div class="meter"><i id="liveBar"></i></div><ul id="liveLog" class="show-log" aria-live="polite"></ul>',
       [['Zur Abrechnung', () => { stop(); o.onDone(); }]], true);
 
     const rnd = seeded(o.r.guests * 31 + o.nightNo);
-    const count = Math.max(6, Math.min(70, Math.round(o.r.guests / 2.3)));
+    const count = Math.max(6, Math.min(85, Math.round(o.r.guests / (o.venue === 'pier' ? 4.5 : 2.3))));
     const dancers = [];
     for (let i = 0; i < count; i++) {
       const depth = rnd();                                   // 0 = hinten, 1 = vorne
@@ -81,10 +81,22 @@ GDU.liveShow = (() => {
     const pulse = reduced ? 0 : Math.pow(1 - ph, 3);         // kurzer Impuls auf jedem Schlag
     const build = Math.min(1, t / 2.5);                      // Club füllt sich am Anfang
 
-    // Raum: Backsteinwand, Boden
-    c.fillStyle = '#0a0f1a'; c.fillRect(0, 0, W, H);
-    c.fillStyle = '#120f18';
-    for (let y = 0; y < 170; y += 14) for (let x = (y / 14) % 2 ? -20 : 0; x < W; x += 40) c.fillRect(x + 1, y + 1, 38, 12);
+    if (o.venue === 'pier') {
+      // Open Air: Nachthimmel mit Sternen, Kransilhouetten, Wasser hinter der Bühne
+      const sky = c.createLinearGradient(0, 0, 0, 180);
+      sky.addColorStop(0, '#050a18'); sky.addColorStop(1, '#14203a');
+      c.fillStyle = sky; c.fillRect(0, 0, W, 180);
+      for (let i = 0; i < 60; i++) { const sx = (i * 97) % W, sy = (i * 53) % 150, tw = reduced ? 0.6 : 0.4 + 0.4 * Math.sin(t * 2 + i); c.fillStyle = 'rgba(255,255,255,' + tw + ')'; c.fillRect(sx, sy, 2, 2); }
+      c.strokeStyle = '#1d2c44'; c.lineWidth = 6;
+      for (const kx of [70, 520]) { c.beginPath(); c.moveTo(kx, 175); c.lineTo(kx, 40); c.lineTo(kx + 110, 30); c.moveTo(kx - 30, 44); c.lineTo(kx, 40); c.stroke(); }
+      c.fillStyle = '#0b1c2c'; c.fillRect(0, 150, W, 30);
+      for (let i = 0; i < 12; i++) { c.fillStyle = i % 2 ? 'rgba(255,45,149,0.25)' : 'rgba(0,229,195,0.25)'; c.fillRect((i * 61 + t * 20) % W, 158 + (i % 3) * 6, 26, 2); }
+    } else {
+      // Club: Backsteinwand
+      c.fillStyle = '#0a0f1a'; c.fillRect(0, 0, W, H);
+      c.fillStyle = '#120f18';
+      for (let y = 0; y < 170; y += 14) for (let x = (y / 14) % 2 ? -20 : 0; x < W; x += 40) c.fillRect(x + 1, y + 1, 38, 12);
+    }
     const floor = c.createLinearGradient(0, 180, 0, H);
     floor.addColorStop(0, '#120f1c'); floor.addColorStop(1, '#05060b');
     c.fillStyle = floor; c.fillRect(0, 175, W, H - 175);
@@ -125,9 +137,11 @@ GDU.liveShow = (() => {
     c.fillText(o.dj.name.toUpperCase(), dx, 160);
 
     // Bar (mit Bar-Upgrade beleuchtet)
+    if (o.venue !== 'pier') {
     c.fillStyle = o.gear.bar ? '#2b2140' : '#1a1622'; c.fillRect(W - 130, 185, 130, 40);
     if (o.gear.bar) { c.save(); c.shadowColor = '#00e5c3'; c.shadowBlur = 12; c.fillStyle = '#00e5c3'; c.fillRect(W - 130, 185, 130, 3); c.restore(); }
     c.fillStyle = '#c1d2df'; c.font = '700 10px system-ui'; c.fillText('BAR', W - 65, 210);
+    }
 
     // Crowd: tanzt im Takt, mehr Stimmung = höhere Sprünge und mehr Arme oben
     for (const d of dancers) {
