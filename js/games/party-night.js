@@ -125,6 +125,7 @@ function startNight(venue = 'bunker') {
   const price = Number(document.getElementById('entry').value);
 
   // Ergebnis sofort berechnen und speichern (die Animation ist nur Show)
+  GDU.holdHUD = true;   // ab hier: Seitenleiste und Erfolgs-Pop-ups erst bei der Abrechnung
   const nightNo = s.night;
   s.money -= promo.price;
   const warm = GDU.tonight('warmup'), door = GDU.tonight('door'), crate = GDU.tonight('crate'), mod = GDU.tonight('mod'), radio = GDU.tonight('radio');
@@ -176,6 +177,7 @@ function startNight(venue = 'bunker') {
 function settlement({ r, dj, promo, price, finished, broke }) {
   const s = GDU.state;
   GDU.holdHUD = false;
+  GDU.renderAchievements(); GDU.flushToasts();
   const row = (label, value, cls = '') => '<tr class="' + cls + '"><td>' + label + '</td><td>' + value + '</td></tr>';
   const sign = n => (n >= 0 ? '+' : '−') + GDU.euro(Math.abs(n));
   const repText = r.rep > 0 ? '+' + r.rep : r.rep < 0 ? String(r.rep) : '±0';

@@ -197,13 +197,14 @@ GDU.modal = (title, html, actions, wide = false) => {
   document.querySelector('.dialog').scrollTop = 0;
   if (!GDU.holdHUD) GDU.updateHUD();   // Seitenleiste zeigt sofort den neuen Stand (außer während der Party-Animation)
   const target = back.querySelector('#dialogContent button:not(:disabled)') || bar.querySelector('button:not(:disabled)') || back.querySelector('input');
-  if (target) target.focus();
+  if (target) target.focus({ preventScroll: true });   // Fenster startet oben, auch wenn es scrollt
 };
 
 GDU.close = () => {
   if (!GDU.dialogOpen()) return;
   back.classList.remove('open');
   GDU.holdHUD = false;
+  GDU.renderAchievements(); GDU.flushToasts();
   if (returnFocus && document.contains(returnFocus) && returnFocus !== document.body) returnFocus.focus();
   returnFocus = null;
   GDU.draw();

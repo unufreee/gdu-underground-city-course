@@ -360,3 +360,19 @@ footer { text-align: center; color: #8298aa; font-size: 12px; padding: 12px; }
 .unlock { display: block; margin: 12px 0; padding: 12px 14px; border-radius: 12px; background: linear-gradient(135deg, #0f3d78, #2a1450); border: 1px solid #5fb0ff; }
 .unlock b { display: block; color: #9cc8ff; letter-spacing: .5px; margin-bottom: 4px; }
 .unlock span { font-size: 14px; }
+
+/* ===== Version 4.0.1: Einbettung im WordPress-iframe =====
+   Ab 900 px Breite passt das ganze Spiel in die iframe-Höhe: Spielfeld skaliert mit,
+   die Seitenleiste scrollt für sich. So gibt es kein doppeltes Scrollen und Fenster
+   erscheinen immer im sichtbaren Bereich. */
+@media (min-width: 900px) {
+  html.embedded, html.embedded body { height: 100%; overflow: hidden; }
+  html.embedded body { display: flex; flex-direction: column; }
+  html.embedded header { padding: 10px 20px 6px; width: 100%; }
+  html.embedded main { flex: 1; min-height: 0; width: 100%; padding: 6px 20px 12px; grid-template-rows: minmax(0, 1fr); }
+  html.embedded main > section { min-height: 0; display: flex; flex-direction: column; }
+  html.embedded .stage { flex: 1; min-height: 0; }
+  html.embedded canvas#world { height: 100%; aspect-ratio: auto; object-fit: contain; }
+  html.embedded .side { min-height: 0; overflow-y: auto; padding-right: 6px; scrollbar-width: thin; }
+  html.embedded footer { display: none; }
+}

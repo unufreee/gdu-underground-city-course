@@ -202,7 +202,7 @@ GDU.liveShow = (() => {
     }
 
     // Anzeige: Gäste zählen hoch, Stimmung füllt sich
-    const k = Math.min(1, t / (DURATION * 0.8));
+    const k = Math.min(1, t / (DURATION * 0.35));   // Gäste und Stimmung stehen fest, bevor die Ereignisse eingeblendet werden
     c.fillStyle = 'rgba(5,10,18,0.78)'; c.fillRect(10, 10, 168, 52);
     c.fillStyle = '#c1d2df'; c.font = '11px system-ui'; c.textAlign = 'left';
     c.fillText('GÄSTE', 20, 27); c.fillText('STIMMUNG', 96, 27);

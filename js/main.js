@@ -82,7 +82,7 @@ document.addEventListener('pointerdown', firstGesture, { once: true });
 
 // Bass durch die Wand: je näher Maria an der Tür von Bunker 99 steht, desto lauter (nur ohne offenes Fenster)
 const wallLevel = () => {
-  if (GDU.dialogOpen() || document.hidden || GDU.state.mute) return 0;
+  if (GDU.dialogOpen() || document.hidden || GDU.state.mute || GDU.state.district === 'harbor') return 0;
   const d = Math.abs(GDU.state.x - 5) + Math.abs(GDU.state.y - 10);
   return GDU.clamp(1 - d / 13, 0, 1);
 };

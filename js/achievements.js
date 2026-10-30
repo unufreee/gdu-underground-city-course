@@ -24,6 +24,22 @@ GDU.ACHIEVEMENTS = [
 ];
 
 let toastTimer = null;
+const toastQueue = [];   // Pop-ups, die während der Live-Party zurückgehalten werden (kein Spoiler)
+
+function showToast(a) {
+  const el = document.getElementById('toast');
+  el.innerHTML = '<span class="toast-icon">' + a.icon + '</span><span><small>Erfolg freigeschaltet</small><b>' + a.name + '</b></span>';
+  el.hidden = false;
+  el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.hidden = true; if (toastQueue.length) showToast(toastQueue.shift()); }, 3600);
+}
+
+// Zurückgehaltene Pop-ups nacheinander zeigen (nach der Live-Party)
+GDU.flushToasts = () => {
+  const el = document.getElementById('toast');
+  if (toastQueue.length && el.hidden) showToast(toastQueue.shift());
+};
 
 // Erfolg freischalten (nur beim ersten Mal) und Pop-up zeigen
 GDU.achieve = id => {
@@ -33,13 +49,10 @@ GDU.achieve = id => {
   if (s.achievements.includes(id)) return;
   s.achievements.push(id);
   GDU.save();
+  if (GDU.holdHUD) { toastQueue.push(a); return; }   // Live-Party läuft: erst bei der Abrechnung zeigen
   GDU.renderAchievements();
   const el = document.getElementById('toast');
-  el.innerHTML = '<span class="toast-icon">' + a.icon + '</span><span><small>Erfolg freigeschaltet</small><b>' + a.name + '</b></span>';
-  el.hidden = false;
-  el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.hidden = true; }, 3600);
+  if (!el.hidden) toastQueue.push(a); else showToast(a);
 };
 
 // Nach einer Party-Nacht prüfen

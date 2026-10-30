@@ -25,7 +25,7 @@ GDU.DISTRICTS = {
       { id: 'agency', name: 'BEAT DEALERS', subtitle: 'DJ-AGENTUR',   a: [2, 7, 2, 6],   door: [5, 7],  color: '#bf527e', height: 48 },
       { id: 'store',  name: 'VINYL JUNKY',  subtitle: 'PLATTENLADEN', a: [12, 17, 2, 6], door: [14, 7], color: '#b48b4d', height: 35 },
       { id: 'club',   name: 'BUNKER 99',    subtitle: 'CLUB',         a: [2, 7, 11, 17], door: [5, 10], color: '#6657a8', height: 63 },
-      { id: 'metro',  name: 'METRO',        subtitle: 'U9 → HAFEN',   stop: true,        door: [10, 18], color: '#2f7fd8' }
+      { id: 'metro',  name: 'METRO',        subtitle: 'U9 → HAFEN',   stop: true,        door: [16, 18], color: '#2f7fd8' }
     ],
     paths: pathSet([1, 18, 7, 10], [8, 12, 10, 17], [13, 18, 10, 17], [1, 18, 18, 19], [8, 11, 0, 1]),
     plaza: (x, y) => x >= 8 && x <= 12 && y >= 10 && y <= 15,
@@ -172,7 +172,7 @@ function metroStop(b) {
   ctx.fillStyle = '#fff'; ctx.font = '900 18px system-ui'; ctx.textAlign = 'center'; ctx.fillText('U', d.x + 34, d.y - 45);
   const locked = GDU.state.district === 'warehouse' && !GDU.state.harbor;
   sign(b.subtitle, d.x + 34, d.y - 72, locked ? '#8ba9b8' : '#9cc8ff', 11);
-  if (locked) { ctx.save(); ctx.font = '11px system-ui'; ctx.textAlign = 'center'; ctx.fillStyle = '#c1d2df'; ctx.fillText('ab dem ersten Saisonsieg', d.x + 34, d.y - 86); ctx.restore(); }
+  if (locked) { ctx.save(); ctx.font = '11px system-ui'; ctx.textAlign = 'center'; ctx.fillStyle = '#c1d2df'; ctx.fillText('🔒 ab dem ersten Saisonsieg', d.x + 34, d.y - 86); ctx.restore(); }
 }
 
 // Pier 7: flache Open-Air-Bühne am Wasser mit Traversen und Boxentürmen
