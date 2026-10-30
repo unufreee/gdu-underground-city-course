@@ -69,7 +69,7 @@ GDU.events = (() => {
   function show(card, rnd, done) {
     const s = GDU.state;
     GDU.modal('+++ DURCHSAGE +++',
-      '<div class="announce"><small>Warehouse District · vor Nacht ' + s.night + '</small><b>' + card.title + '</b><p>' + card.text + '</p></div>' +
+      '<div class="announce"><small>Underground City · vor Nacht ' + s.night + '</small><b>' + card.title + '</b><p>' + card.text + '</p></div>' +
       '<div class="choices">' +
       ['a', 'b'].map(k => '<button class="choice" data-choice="' + k + '"><b>' + card[k].label + '</b><small>' + effects(card[k]) + '</small></button>').join('') +
       '</div>',

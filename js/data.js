@@ -70,7 +70,7 @@ GDU.promos = [
 
 // Ereignis des Abends: beeinflusst die Gästezahl, teils nur für ein Genre
 GDU.trends = [
-  { id: 'normal', title: 'Normaler Freitag',   text: 'Ein ganz normaler Abend im Warehouse District.', mult: 1 },
+  { id: 'normal', title: 'Normaler Freitag',   text: 'Ein ganz normaler Abend in der Stadt.', mult: 1 },
   { id: 'techno', title: 'Techno-Hype',        text: 'Ein Video aus dem Bunker 99 geht viral. Techno ist gefragt.', genre: 'Techno', mult: 1.35 },
   { id: 'house',  title: 'Semesterstart',      text: 'Die Studis sind zurück und wollen House.', genre: 'House', mult: 1.35 },
   { id: 'dnb',    title: 'Bass-Woche',         text: 'Die Drum-&-Bass-Szene ist in der Stadt.', genre: 'Drum & Bass', mult: 1.45 },
