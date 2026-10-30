@@ -210,6 +210,7 @@ Die Adresse **https://unufreee.github.io/gdu-underground-city-course/?demo** sta
 | 3.1 | **Story-Version:** Ereigniskarten zwischen den Nächten mit Entscheidungen und Folgen, zwölf Erfolge mit Pop-ups und Sammlung, sprechende Passanten mit Tipps. Fehler behoben: Ton-Einstellung und Erfolge blieben beim Start einer neuen Saison nicht erhalten. Spielstände aus 3.0 und Demo-Modus bleiben erhalten. Gesichert im Branch `version-3.0`. |
 | 4.0 | **Chapter 02:** zweiter Bezirk „Hafen“ (freigeschaltet nach dem ersten Saisonsieg, Metro U9), Radio Hafenfunk, Kran-Lounge mit drei neuen DJs, Pier 7 Open Air mit eigener Live-Szene; Club-Ausbau in drei Stufen, sichtbar auf der Karte; Sprüche für alle DJs; drei neue Erfolge; Saisonziel 10.000 € ab Chapter 02, Titel relativ zum Ziel; Demo-Modus mit offenem Hafen. Spielstände aus 3.1 bleiben erhalten. Gesichert vorher im Branch `version-3.1`. |
 | 4.0.1 | Fehlerbehebung nach Test im WordPress-iframe: kompaktes Layout im iframe ohne doppeltes Scrollen (Fenster nicht mehr abgeschnitten), Planungsfenster öffnet oben, Erfolgs-Pop-ups erscheinen erst nach der Live-Party statt sie vorher zu verraten, Gäste- und Stimmungszähler passen zu den Einblendungen, Metro-Station verlegt (überdeckte Bunker 99 nicht mehr), kein Wand-Bass am Hafen. Gesichert vorher im Branch `version-4.0`. |
+| 4.0.2 | Hinweis im Club-Ausbau in der letzten Nacht der Saison, dass sich ein Ausbau dann kaum noch lohnt. Gesichert vorher im Branch `version-4.0.1`. |
 
 ## Entwicklung
 

@@ -100,7 +100,9 @@ GDU.places.upgrade = () => {
       '<button data-level="' + i + '"' + (!next || s.money < l.price ? ' disabled' : '') + '>' + (done ? 'Gebaut' : next ? (s.money < l.price ? 'Zu teuer · ' : 'Bauen · ') + GDU.euro(l.price) : 'Erst Stufe ' + i) + '</button></div>';
   }).join('');
   GDU.modal('BUNKER 99 · Club-Ausbau',
-    '<p>Kapital: <b>' + GDU.euro(s.money) + '</b>. Jede Stufe bleibt bis zum Ende der Saison und macht den Bunker größer. Mehr Platz bedeutet auch etwas mehr Personal (+40 € Betriebskosten pro Stufe).</p><div class="cards">' + cards + '</div>',
+    '<p>Kapital: <b>' + GDU.euro(s.money) + '</b>. Jede Stufe bleibt bis zum Ende der Saison und macht den Bunker größer. Mehr Platz bedeutet auch etwas mehr Personal (+40 € Betriebskosten pro Stufe).</p>' +
+    (s.night >= GDU.config.nights ? '<p class="note"><span class="warn"><b>Letzte Nacht der Saison:</b></span> Ein Ausbau wirkt jetzt nur noch eine Nacht und spielt sein Geld fast nie wieder ein. Fürs Saisonziel lieber das Kapital behalten.</p>' : '') +
+    '<div class="cards">' + cards + '</div>',
     [['Zurück zur Planung', () => GDU.openParty('bunker'), false, 'secondary']], true);
   document.querySelectorAll('[data-level]').forEach(btn => btn.addEventListener('click', () => {
     const i = Number(btn.dataset.level), l = GDU.clubLevels.at(i);
